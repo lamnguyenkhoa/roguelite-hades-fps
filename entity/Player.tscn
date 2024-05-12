@@ -37,7 +37,8 @@ texture = ExtResource("2_tyg2i")
 offset_left = 6.0
 offset_right = 92.0
 offset_bottom = 23.0
-text = "0 u / s"
+text = "VSpeed: 0 u/s
+HSpeed: 0 u/s"
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.948596, 0)
