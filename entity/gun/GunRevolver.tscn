@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dqsbnpipsrlk8"]
+
+[ext_resource type="PackedScene" uid="uid://ci5houiucu281" path="res://asset/kenny_blaster/blasterA.glb" id="1_2ueqn"]
+
+[node name="blasterA" instance=ExtResource("1_2ueqn")]
+
+[node name="tmpParent" parent="." index="0"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="blasterA" parent="tmpParent" index="0"]
+layers = 2

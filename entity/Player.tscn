@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=7 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://entity/player.gd" id="1_rl0vi"]
 [ext_resource type="Texture2D" uid="uid://ctkoyf8rtxhqs" path="res://asset/ui/crosshair.png" id="2_tyg2i"]
+[ext_resource type="PackedScene" uid="uid://dqsbnpipsrlk8" path="res://entity/gun/GunRevolver.tscn" id="3_0075q"]
 [ext_resource type="Texture2D" uid="uid://ddwxkjlbdh8hq" path="res://asset/sprite/blob_shadow.png" id="3_tgexf"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_f0s2u"]
@@ -15,10 +16,14 @@ script = ExtResource("1_rl0vi")
 shape = SubResource("CapsuleShape3D_f0s2u")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+visible = false
 mesh = SubResource("CapsuleMesh_o6vus")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.660179, 0)
+cull_mask = 1048573
+current = true
+fov = 90.0
 
 [node name="TextureRect" type="TextureRect" parent="Camera3D"]
 anchors_preset = 8
@@ -35,11 +40,34 @@ grow_vertical = 2
 texture = ExtResource("2_tyg2i")
 
 [node name="SpeedLabel" type="Label" parent="Camera3D"]
-offset_left = 6.0
-offset_right = 92.0
-offset_bottom = 23.0
+offset_right = 106.0
+offset_bottom = 49.0
 text = "VSpeed: 0 u/s
 HSpeed: 0 u/s"
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Camera3D"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Camera3D/SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+msaa_3d = 1
+size = Vector2i(1280, 720)
+render_target_update_mode = 4
+
+[node name="GunCamera" type="Camera3D" parent="Camera3D/SubViewportContainer/SubViewport"]
+cull_mask = 1047554
+fov = 40.0
+
+[node name="GunContainer" type="Node3D" parent="Camera3D/SubViewportContainer/SubViewport/GunCamera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.3, -1.1)
+
+[node name="blasterA2" parent="Camera3D/SubViewportContainer/SubViewport/GunCamera/GunContainer" instance=ExtResource("3_0075q")]
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.948596, 0)

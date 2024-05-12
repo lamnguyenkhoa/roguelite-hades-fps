@@ -1,21 +1,23 @@
 extends CharacterBody3D
 class_name Player
 
-@onready var camera: Camera3D = $Camera3D
+@onready var player_camera: Camera3D = $Camera3D
 @onready var ground_raycast: RayCast3D = $RayCast3D
 @onready var audio_player: AudioStreamPlayer3D = $PlayerAudio
 @onready var speed_label: Label = $Camera3D/SpeedLabel
 @onready var dash_timer: Timer = $DashTimer
+@onready var gun_camera: Camera3D = $Camera3D/SubViewportContainer/SubViewport/GunCamera
+@onready var gun_container = $Camera3D/SubViewportContainer/SubViewport/GunCamera/GunContainer
 
 var landing_sfx = preload ("res://asset/sfx/jump_landing.wav")
 
-const MAX_SPEED = 10.0
+const MAX_SPEED = 8.0
 const MAX_FALL_SPEED = 50.0
-const ACCEL_RATE = 50.0
-const JUMP_FORCE = 9
+const ACCEL_RATE = 40.0
+const JUMP_FORCE = 8
 const RAY_REACH = 0.1
 const MOUSE_SENS = 0.005
-const GRAVITY = 15
+const GRAVITY = 14
 
 const DASH_SPEED = 20
 
@@ -29,10 +31,13 @@ var is_dashing = false
 var bonus_speed = 0
 var input_dir = Vector2(0, 0)
 
+var gun_container_offset: Vector3
+
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	prev_pos = camera.position
-	camera_height = camera.position.y
+	prev_pos = player_camera.position
+	camera_height = player_camera.position.y
+	gun_container_offset = gun_container.position
 
 func _input(event):
 	if event is InputEventMouseMotion:
@@ -47,6 +52,7 @@ func _input(event):
 
 func _process(delta):
 	interpolate_camera_pos(delta)
+	gun_camera.set_global_transform(player_camera.get_global_transform())
 
 func _physics_process(delta):
 	if not is_dashing:
@@ -89,6 +95,9 @@ func _physics_process(delta):
 	speed_label.text = "HSpeed: {0} u/s\nVSpeed: {1} u/s".format([h_speed, v_speed])
 	move_and_slide()
 
+	var gun_sway_velocity = velocity * transform.basis
+	gun_container.position = lerp(gun_container.position, gun_container_offset - (gun_sway_velocity / 60), delta * 10)
+
 func grounded():
 	return is_on_floor()
 	# var origin = global_position + ground_raycast.position
@@ -102,16 +111,16 @@ func grounded():
 
 func interpolate_camera_pos(delta):
 	var camera_pos = prev_pos.lerp(position, delta * 70)
-	camera.global_position = camera_pos
-	camera.position.y = camera_height
+	player_camera.global_position = camera_pos
+	player_camera.position.y = camera_height
 	prev_pos = camera_pos
 
 func rotate_player(event):
 	rotate(Vector3(0, -1, 0), event.relative.x * MOUSE_SENS)
-	camera.rotate_x( - event.relative.y * MOUSE_SENS)
-	camera.rotation.y = 0
-	camera.rotation.z = 0
-	camera.rotation.x = clamp(camera.global_rotation.x, deg_to_rad( - 90), deg_to_rad(90))
+	player_camera.rotate_x( - event.relative.y * MOUSE_SENS)
+	player_camera.rotation.y = 0
+	player_camera.rotation.z = 0
+	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad( - 90), deg_to_rad(90))
 
 func _on_dash_timer_timeout() -> void:
 	is_dashing = false
