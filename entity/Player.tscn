@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=6 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://entity/player.gd" id="1_rl0vi"]
 [ext_resource type="Texture2D" uid="uid://ctkoyf8rtxhqs" path="res://asset/ui/crosshair.png" id="2_tyg2i"]
+[ext_resource type="Texture2D" uid="uid://ddwxkjlbdh8hq" path="res://asset/sprite/blob_shadow.png" id="3_tgexf"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_f0s2u"]
 
@@ -47,5 +48,11 @@ target_position = Vector3(0, -0.5, 0)
 [node name="PlayerAudio" type="AudioStreamPlayer3D" parent="."]
 
 [node name="DashTimer" type="Timer" parent="."]
-wait_time = 0.5
+wait_time = 0.2
 one_shot = true
+
+[node name="Decal" type="Decal" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.27613, 0)
+texture_albedo = ExtResource("3_tgexf")
+
+[connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]
