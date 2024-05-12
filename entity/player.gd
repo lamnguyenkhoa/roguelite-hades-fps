@@ -49,12 +49,14 @@ func _physics_process(delta):
 			audio_player.play()
 			jumped = false
 		# Stand still
-		if vel_horizontal.length() < 1.0 and input_dir.length() < 0.01:
+		if vel_horizontal.length_squared() < 1.0 and input_dir.length_squared() < 0.01:
 			vel_horizontal = Vector2.ZERO
 	else:
 		vel_vertical -= GRAVITY * delta
 
-	var current_speed = vel_horizontal.dot(input_dir)
+	# Use the next line will make player move faster when strafing + rotate camera
+	# var current_speed = vel_horizontal.dot(input_dir)
+	var current_speed = vel_horizontal.length()
 	var add_speed = clamp(MAX_SPEED - current_speed, 0.0, ACCEL * delta)
 	vel_horizontal += input_dir * add_speed
 		
@@ -63,7 +65,7 @@ func _physics_process(delta):
 		jumped = true
 
 	velocity = Vector3(vel_horizontal.x, vel_vertical, vel_horizontal.y)
-	var speedometer = str(snapped(vel_horizontal.length(), 0.1))
+	var speedometer = snapped(vel_horizontal.length(), 0.1)
 	speed_label.text = "{0} u/s".format([speedometer])
 	move_and_slide()
 
