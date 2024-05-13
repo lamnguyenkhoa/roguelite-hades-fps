@@ -20,10 +20,10 @@ shadow_enabled = true
 shadow_opacity = 0.75
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
+snap = 0.5
 use_collision = true
 
 [node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0203171, 9.53674e-07, 0.210019)
 size = Vector3(100, 1, 100)
 material = ExtResource("2_32h3k")
 
@@ -40,6 +40,11 @@ material = ExtResource("3_mqr0u")
 [node name="CSGBox3D4" type="CSGBox3D" parent="CSGCombiner3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.00006, 5.66556, 8.76647)
 size = Vector3(5, 1, 5)
+material = ExtResource("3_mqr0u")
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.328, 4.38059, 8.766)
+size = Vector3(5, 7.7579, 5)
 material = ExtResource("3_mqr0u")
 
 [node name="SpotLight3D" type="SpotLight3D" parent="."]

@@ -6,8 +6,7 @@ class_name Player
 @onready var audio_player: AudioStreamPlayer3D = $PlayerAudio
 @onready var speed_label: Label = $Camera3D/SpeedLabel
 @onready var dash_timer: Timer = $DashTimer
-@onready var gun_camera: Camera3D = $Camera3D/SubViewportContainer/SubViewport/GunCamera
-@onready var gun_container = $Camera3D/SubViewportContainer/SubViewport/GunCamera/GunContainer
+@onready var gun_container = $Camera3D/GunContainer
 
 var landing_sfx = preload ("res://asset/sfx/jump_landing.wav")
 
@@ -52,7 +51,6 @@ func _input(event):
 
 func _process(delta):
 	interpolate_camera_pos(delta)
-	gun_camera.set_global_transform(player_camera.get_global_transform())
 
 func _physics_process(delta):
 	if not is_dashing:

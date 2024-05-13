@@ -21,7 +21,6 @@ mesh = SubResource("CapsuleMesh_o6vus")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.660179, 0)
-cull_mask = 1048573
 current = true
 fov = 90.0
 
@@ -45,29 +44,10 @@ offset_bottom = 49.0
 text = "VSpeed: 0 u/s
 HSpeed: 0 u/s"
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="Camera3D"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-stretch = true
+[node name="GunContainer" type="Node3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.326, -0.4, -1.23)
 
-[node name="SubViewport" type="SubViewport" parent="Camera3D/SubViewportContainer"]
-transparent_bg = true
-handle_input_locally = false
-msaa_3d = 1
-size = Vector2i(1280, 720)
-render_target_update_mode = 4
-
-[node name="GunCamera" type="Camera3D" parent="Camera3D/SubViewportContainer/SubViewport"]
-cull_mask = 1047554
-fov = 40.0
-
-[node name="GunContainer" type="Node3D" parent="Camera3D/SubViewportContainer/SubViewport/GunCamera"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.3, -1.1)
-
-[node name="blasterA2" parent="Camera3D/SubViewportContainer/SubViewport/GunCamera/GunContainer" instance=ExtResource("3_0075q")]
+[node name="GunRevolver" parent="Camera3D/GunContainer" instance=ExtResource("3_0075q")]
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.948596, 0)
