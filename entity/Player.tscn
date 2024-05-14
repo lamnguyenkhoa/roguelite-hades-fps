@@ -24,6 +24,7 @@ mesh = SubResource("CapsuleMesh_o6vus")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.660179, 0)
 current = true
 fov = 90.0
+near = 0.02
 
 [node name="TextureRect" type="TextureRect" parent="Camera3D"]
 anchors_preset = 8
@@ -48,7 +49,7 @@ text = "VSpeed: 0 u/s
 HSpeed: 0 u/s"
 
 [node name="GunContainer" type="Node3D" parent="Camera3D"]
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.201, -0.095, -0.21)
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.051, -0.095, -0.185)
 
 [node name="StarterPistol" parent="Camera3D/GunContainer" instance=ExtResource("3_wg1yd")]
 

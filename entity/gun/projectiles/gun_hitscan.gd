@@ -17,7 +17,7 @@ func init(pos1: Vector3, pos2: Vector3):
 	draw_mesh.surface_end()
 
 func _process(delta):
-	alpha -= delta * 4
+	alpha -= delta * 6
 	alpha = clamp(alpha, 0, 1)
 	material_override.albedo_color.a = alpha
 

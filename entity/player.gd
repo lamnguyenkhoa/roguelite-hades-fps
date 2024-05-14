@@ -31,6 +31,7 @@ var vel_horizontal = Vector2(0, 0)
 var vel_vertical = 0
 var is_dashing = false
 var bonus_speed = 0
+var raw_input_dir = Vector2(0, 0)
 var input_dir = Vector2(0, 0)
 
 var gun_container_offset: Vector3
@@ -59,8 +60,8 @@ func _process(delta):
 
 func _physics_process(delta):
 	if not is_dashing:
-		input_dir = Input.get_vector("left", "right", "up", "down")
-		input_dir = input_dir.rotated( - rotation.y)
+		raw_input_dir = Input.get_vector("left", "right", "up", "down")
+		input_dir = raw_input_dir.rotated( - rotation.y)
 
 	# If the next line is for grounded only, we will have bunnyhop tech
 	# If not move, gradually reduce movespeed to 0
@@ -99,10 +100,15 @@ func _physics_process(delta):
 	move_and_slide()
 
 	var gun_sway_velocity = velocity * transform.basis
-	gun_container.position = lerp(gun_container.position, gun_container_offset - (gun_sway_velocity / 60), delta * 10)
+	gun_container.position = lerp(gun_container.position, gun_container_offset - (gun_sway_velocity / 500), delta * 10)
+
+	camera_tilt(delta)
 
 func primary_shoot():
 	var gun: Gun = gun_container.get_child(0)
+	if not gun.try_shoot():
+		return
+	gun.play_primary_shoot_animation()
 	var bullet_inst: GunHitscan = gun.bullet_trail.instantiate()
 	if aim_ray.is_colliding():
 		bullet_inst.init(gun.barrel.global_position, aim_ray.get_collision_point())
@@ -122,9 +128,15 @@ func interpolate_camera_pos(delta):
 func rotate_player(event):
 	rotate(Vector3(0, -1, 0), event.relative.x * MOUSE_SENS)
 	player_camera.rotate_x( - event.relative.y * MOUSE_SENS)
-	player_camera.rotation.y = 0
-	player_camera.rotation.z = 0
 	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad( - 90), deg_to_rad(90))
+
+func camera_tilt(delta):
+	if raw_input_dir.x < 0:
+		player_camera.rotation.z = lerp(player_camera.rotation.z, deg_to_rad(3.0), delta * 5)
+	elif raw_input_dir.x > 0:
+		player_camera.rotation.z = lerp(player_camera.rotation.z, deg_to_rad( - 3.0), delta * 5)
+	else:
+		player_camera.rotation.z = lerp(player_camera.rotation.z, deg_to_rad(0), delta * 5)
 
 func _on_dash_timer_timeout() -> void:
 	is_dashing = false
