@@ -6,7 +6,10 @@ class_name Player
 @onready var audio_player: AudioStreamPlayer3D = $PlayerAudio
 @onready var speed_label: Label = $Camera3D/SpeedLabel
 @onready var dash_timer: Timer = $DashTimer
+
 @onready var gun_container = $Camera3D/GunContainer
+@onready var aim_ray: RayCast3D = $Camera3D/AimRay
+@onready var aim_ray_end: Marker3D = $Camera3D/AimRay/AimRayEnd
 
 var landing_sfx = preload ("res://asset/sfx/jump_landing.wav")
 
@@ -41,13 +44,15 @@ func _ready():
 func _input(event):
 	if event is InputEventMouseMotion:
 		rotate_player(event)
-	if event.is_action_pressed("jump") and grounded():
+	if event.is_action_pressed("jump") and is_on_floor():
 		vel_vertical = JUMP_FORCE
 		jumped = true
 	if event.is_action_pressed("dash"):
 		is_dashing = true
 		vel_vertical = 0
 		dash_timer.start()
+	if event.is_action_pressed("primary_shoot"):
+		primary_shoot()
 
 func _process(delta):
 	interpolate_camera_pos(delta)
@@ -64,7 +69,7 @@ func _physics_process(delta):
 	if vel_horizontal.length_squared() < 1.0 and input_dir.length_squared() < 0.01:
 		vel_horizontal = Vector2.ZERO
 
-	if grounded():
+	if is_on_floor():
 		if vel_vertical < - 1:
 			audio_player.stream = landing_sfx
 			audio_player.play()
@@ -96,16 +101,17 @@ func _physics_process(delta):
 	var gun_sway_velocity = velocity * transform.basis
 	gun_container.position = lerp(gun_container.position, gun_container_offset - (gun_sway_velocity / 60), delta * 10)
 
-func grounded():
-	return is_on_floor()
-	# var origin = global_position + ground_raycast.position
-	# var target = Vector3.DOWN * RAY_REACH
-	# var query = PhysicsRayQueryParameters3D.create(origin, origin + target)
-	# if get_world_3d() == null:
-	# 	return false
-	# var check = get_world_3d().direct_space_state.intersect_ray(query)
-	# floor_col_pos = check
-	# return check.size() > 0
+func primary_shoot():
+	var gun: Gun = gun_container.get_child(0)
+	var bullet_inst: GunHitscan = gun.bullet_trail.instantiate()
+	if aim_ray.is_colliding():
+		bullet_inst.init(gun.barrel.global_position, aim_ray.get_collision_point())
+		if aim_ray.get_collider().is_in_group("enemy"):
+			# TODO: Damage enemy here
+			return
+	else:
+		bullet_inst.init(gun.barrel.global_position, aim_ray_end.global_position)
+	get_parent().add_child(bullet_inst)
 
 func interpolate_camera_pos(delta):
 	var camera_pos = prev_pos.lerp(position, delta * 70)

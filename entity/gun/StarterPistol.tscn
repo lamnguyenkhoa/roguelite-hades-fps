@@ -1,0 +1,17 @@
+[gd_scene load_steps=5 format=3 uid="uid://oai4dltwisn0"]
+
+[ext_resource type="PackedScene" uid="uid://ci5houiucu281" path="res://asset/kenny_blaster/blasterA.glb" id="1_l8ndo"]
+[ext_resource type="Script" path="res://entity/gun/gun.gd" id="1_nvt8k"]
+[ext_resource type="Resource" uid="uid://fglfjk2qrbee" path="res://entity/gun/data/starter_pistol.tres" id="2_gfvof"]
+[ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://entity/gun/projectiles/GunHitscan.tscn" id="3_fc6cq"]
+
+[node name="StarterPistol" type="Node3D"]
+script = ExtResource("1_nvt8k")
+gun_resource = ExtResource("2_gfvof")
+bullet_trail = ExtResource("3_fc6cq")
+
+[node name="blasterA2" parent="." instance=ExtResource("1_l8ndo")]
+transform = Transform3D(-1, 0, -1.19209e-07, 0, 1, 0, 1.19209e-07, 0, -1, -0.157831, 0, 0)
+
+[node name="Barrel" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.004913, 0.117836, -0.29391)

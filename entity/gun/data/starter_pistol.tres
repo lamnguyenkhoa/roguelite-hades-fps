@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="GunResource" load_steps=2 format=3 uid="uid://fglfjk2qrbee"]
+
+[ext_resource type="Script" path="res://entity/gun/gun_resource.gd" id="1_eoy30"]
+
+[resource]
+script = ExtResource("1_eoy30")
+name = "Starter Pistol"
+description = "LMB: Fire a hitscan shot.
+RMB: Charge up to fire a 3-times ricochet hitscan shot."
+damage = 10.0
+firerate = 2.0
+projectile_speed = 0.0
+is_hitscan = true

@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://entity/player.gd" id="1_rl0vi"]
 [ext_resource type="Texture2D" uid="uid://ctkoyf8rtxhqs" path="res://asset/ui/crosshair.png" id="2_tyg2i"]
-[ext_resource type="PackedScene" uid="uid://dqsbnpipsrlk8" path="res://entity/gun/GunRevolver.tscn" id="3_0075q"]
 [ext_resource type="Texture2D" uid="uid://ddwxkjlbdh8hq" path="res://asset/sprite/blob_shadow.png" id="3_tgexf"]
+[ext_resource type="PackedScene" uid="uid://oai4dltwisn0" path="res://entity/gun/StarterPistol.tscn" id="3_wg1yd"]
 [ext_resource type="PackedScene" uid="uid://byj1y3wrwtdtq" path="res://ui/PauseUI.tscn" id="5_srijb"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_f0s2u"]
@@ -48,9 +48,18 @@ text = "VSpeed: 0 u/s
 HSpeed: 0 u/s"
 
 [node name="GunContainer" type="Node3D" parent="Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.326, -0.4, -1.23)
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.201, -0.095, -0.21)
 
-[node name="GunRevolver" parent="Camera3D/GunContainer" instance=ExtResource("3_0075q")]
+[node name="StarterPistol" parent="Camera3D/GunContainer" instance=ExtResource("3_wg1yd")]
+
+[node name="AimRay" type="RayCast3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.611622)
+target_position = Vector3(0, 0, -100)
+collision_mask = 3
+collide_with_areas = true
+
+[node name="AimRayEnd" type="Marker3D" parent="Camera3D/AimRay"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -101)
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.948596, 0)
