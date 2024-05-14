@@ -11,3 +11,4 @@ damage = 10.0
 firerate = 2.0
 projectile_speed = 0.0
 is_hitscan = true
+secondary_not_attack = true

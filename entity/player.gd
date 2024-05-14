@@ -52,8 +52,10 @@ func _input(event):
 		is_dashing = true
 		vel_vertical = 0
 		dash_timer.start()
-	if event.is_action_pressed("primary_shoot"):
-		primary_shoot()
+	if event.is_action_pressed("primary_attack"):
+		primary_attack()
+	if event.is_action_pressed("secondary_attack"):
+		secondary_attack()
 
 func _process(delta):
 	interpolate_camera_pos(delta)
@@ -104,11 +106,22 @@ func _physics_process(delta):
 
 	camera_tilt(delta)
 
-func primary_shoot():
+func primary_attack():
 	var gun: Gun = gun_container.get_child(0)
-	if not gun.try_shoot():
+	if not gun.try_primary_attack():
 		return
-	gun.play_primary_shoot_animation()
+	gun.play_primary_attack_anim()
+	perform_attack(gun)
+
+func secondary_attack():
+	var gun: Gun = gun_container.get_child(0)
+	if not gun.try_secondary_attack():
+		return
+	gun.play_secondary_attack_anim()
+	if not gun.gun_resource.secondary_not_attack:
+		perform_attack(gun)
+
+func perform_attack(gun: Gun):
 	var bullet_inst: GunHitscan = gun.bullet_trail.instantiate()
 	if aim_ray.is_colliding():
 		bullet_inst.init(gun.barrel.global_position, aim_ray.get_collision_point())
