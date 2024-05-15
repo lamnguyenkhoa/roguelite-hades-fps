@@ -9,15 +9,12 @@ func _ready():
 	material_override = dup_mat
 
 func init(pos1: Vector3, pos2: Vector3):
-	var draw_mesh = ImmediateMesh.new()
-	mesh = draw_mesh
-	draw_mesh.surface_begin(Mesh.PRIMITIVE_LINES, material_override)
-	draw_mesh.surface_add_vertex(pos1)
-	draw_mesh.surface_add_vertex(pos2)
-	draw_mesh.surface_end()
+	var thickness = 2
+	self.scale = Vector3(0.01 * thickness, 0.01 * thickness, pos1.distance_to(pos2))
+	self.look_at_from_position((pos1 + pos2) / 2, pos2, Vector3.UP)
 
 func _process(delta):
-	alpha -= delta * 6
+	alpha -= delta * 5
 	alpha = clamp(alpha, 0, 1)
 	material_override.albedo_color.a = alpha
 

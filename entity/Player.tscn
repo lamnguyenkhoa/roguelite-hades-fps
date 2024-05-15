@@ -20,13 +20,15 @@ shape = SubResource("CapsuleShape3D_f0s2u")
 visible = false
 mesh = SubResource("CapsuleMesh_o6vus")
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="Neck" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="Neck"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.660179, 0)
 current = true
 fov = 90.0
 near = 0.02
 
-[node name="TextureRect" type="TextureRect" parent="Camera3D"]
+[node name="TextureRect" type="TextureRect" parent="Neck/Camera3D"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -40,7 +42,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_tyg2i")
 
-[node name="SpeedLabel" type="Label" parent="Camera3D"]
+[node name="SpeedLabel" type="Label" parent="Neck/Camera3D"]
 offset_left = 8.0
 offset_top = 8.0
 offset_right = 192.0
@@ -48,18 +50,18 @@ offset_bottom = 64.0
 text = "VSpeed: 0 u/s
 HSpeed: 0 u/s"
 
-[node name="GunContainer" type="Node3D" parent="Camera3D"]
+[node name="GunContainer" type="Node3D" parent="Neck/Camera3D"]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.051, -0.095, -0.185)
 
-[node name="StarterPistol" parent="Camera3D/GunContainer" instance=ExtResource("3_wg1yd")]
+[node name="StarterPistol" parent="Neck/Camera3D/GunContainer" instance=ExtResource("3_wg1yd")]
 
-[node name="AimRay" type="RayCast3D" parent="Camera3D"]
+[node name="AimRay" type="RayCast3D" parent="Neck/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.611622)
 target_position = Vector3(0, 0, -100)
 collision_mask = 3
 collide_with_areas = true
 
-[node name="AimRayEnd" type="Marker3D" parent="Camera3D/AimRay"]
+[node name="AimRayEnd" type="Marker3D" parent="Neck/Camera3D/AimRay"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -101)
 
 [node name="RayCast3D" type="RayCast3D" parent="."]

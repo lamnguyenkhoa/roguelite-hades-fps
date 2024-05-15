@@ -8,7 +8,7 @@ name = "Starter Pistol"
 description = "LMB: Fire a hitscan shot.
 RMB: Charge up to fire a 3-times ricochet hitscan shot."
 damage = 10.0
-firerate = 2.0
+firerate = 2.4
 projectile_speed = 0.0
 is_hitscan = true
 secondary_not_attack = true

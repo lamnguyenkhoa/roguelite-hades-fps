@@ -1,15 +1,16 @@
 extends CharacterBody3D
 class_name Player
 
-@onready var player_camera: Camera3D = $Camera3D
+@onready var player_camera: Camera3D = $Neck/Camera3D
 @onready var ground_raycast: RayCast3D = $RayCast3D
 @onready var audio_player: AudioStreamPlayer3D = $PlayerAudio
-@onready var speed_label: Label = $Camera3D/SpeedLabel
+@onready var speed_label: Label = $Neck/Camera3D/SpeedLabel
 @onready var dash_timer: Timer = $DashTimer
+@onready var neck: Node3D = $Neck
 
-@onready var gun_container = $Camera3D/GunContainer
-@onready var aim_ray: RayCast3D = $Camera3D/AimRay
-@onready var aim_ray_end: Marker3D = $Camera3D/AimRay/AimRayEnd
+@onready var gun_container = $Neck/Camera3D/GunContainer
+@onready var aim_ray: RayCast3D = $Neck/Camera3D/AimRay
+@onready var aim_ray_end: Marker3D = $Neck/Camera3D/AimRay/AimRayEnd
 
 var landing_sfx = preload ("res://asset/sfx/jump_landing.wav")
 
@@ -141,15 +142,17 @@ func interpolate_camera_pos(delta):
 func rotate_player(event):
 	rotate(Vector3(0, -1, 0), event.relative.x * MOUSE_SENS)
 	player_camera.rotate_x( - event.relative.y * MOUSE_SENS)
-	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad( - 90), deg_to_rad(90))
+	player_camera.rotation.y = 0
+	player_camera.rotation.z = 0
+	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad( - 80), deg_to_rad(80))
 
 func camera_tilt(delta):
 	if raw_input_dir.x < 0:
-		player_camera.rotation.z = lerp(player_camera.rotation.z, deg_to_rad(3.0), delta * 5)
+		neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(3.0), delta * 5)
 	elif raw_input_dir.x > 0:
-		player_camera.rotation.z = lerp(player_camera.rotation.z, deg_to_rad( - 3.0), delta * 5)
+		neck.rotation.z = lerp(neck.rotation.z, deg_to_rad( - 3.0), delta * 5)
 	else:
-		player_camera.rotation.z = lerp(player_camera.rotation.z, deg_to_rad(0), delta * 5)
+		neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(0), delta * 5)
 
 func _on_dash_timer_timeout() -> void:
 	is_dashing = false
