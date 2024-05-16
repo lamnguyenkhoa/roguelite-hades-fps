@@ -87,12 +87,14 @@ theme_override_font_sizes/font_size = 30
 text = "Mouse Sensitivity
 "
 
-[node name="HSlider" type="HSlider" parent="TabContainer/Control/MouseSens"]
+[node name="MouseSenSlider" type="HSlider" parent="TabContainer/Control/MouseSens"]
 layout_mode = 0
 offset_left = 328.0
 offset_top = 16.0
 offset_right = 704.0
 offset_bottom = 32.0
+min_value = 1.0
+value = 1.0
 
 [node name="FOV" type="Control" parent="TabContainer/Control"]
 layout_mode = 1
@@ -160,4 +162,5 @@ text = "<< Back"
 [connection signal="pressed" from="VBoxContainer/ControlOption" to="." method="_on_control_option_pressed"]
 [connection signal="pressed" from="VBoxContainer/GraphicOption" to="." method="_on_graphic_option_pressed"]
 [connection signal="pressed" from="VBoxContainer/AudioOption" to="." method="_on_audio_option_pressed"]
+[connection signal="value_changed" from="TabContainer/Control/MouseSens/MouseSenSlider" to="." method="_on_mouse_sen_slider_value_changed"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

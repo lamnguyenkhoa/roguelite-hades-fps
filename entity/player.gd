@@ -144,8 +144,8 @@ func interpolate_camera_pos(delta):
 	prev_pos = camera_pos
 
 func rotate_player(event):
-	rotate(Vector3(0, -1, 0), event.relative.x * MOUSE_SENS)
-	player_camera.rotate_x( - event.relative.y * MOUSE_SENS)
+	rotate(Vector3(0, -1, 0), event.relative.x * (GameManager.mouse_sensitivity / 10000))
+	player_camera.rotate_x( - event.relative.y * (GameManager.mouse_sensitivity / 10000))
 	player_camera.rotation.y = 0
 	player_camera.rotation.z = 0
 	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad( - 80), deg_to_rad(80))

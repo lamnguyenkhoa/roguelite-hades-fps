@@ -3,11 +3,14 @@ class_name SettingUI
 
 @onready var tab_container: TabContainer = $TabContainer
 
+@onready var mouse_sen_slider: HSlider = $TabContainer/Control/MouseSens/MouseSenSlider
+
 var pause_ui: PauseUI
 
 func _ready() -> void:
 	visible = false
 	pause_ui = get_parent()
+	mouse_sen_slider.value = GameManager.mouse_sensitivity
 
 func open_menu():
 	visible = true
@@ -27,3 +30,6 @@ func _on_graphic_option_pressed() -> void:
 func _on_back_button_pressed() -> void:
 	close_menu()
 	pause_ui.return_to_pause_menu()
+
+func _on_mouse_sen_slider_value_changed(value: float) -> void:
+	GameManager.mouse_sensitivity = value
