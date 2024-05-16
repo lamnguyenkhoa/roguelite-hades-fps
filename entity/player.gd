@@ -1,10 +1,13 @@
 extends CharacterBody3D
 class_name Player
 
+@export var can_wall_jump: bool # This will include wallslide
+@export var can_wall_run: bool
+
 @onready var player_camera: Camera3D = $Neck/Camera3D
 @onready var ground_raycast: RayCast3D = $RayCast3D
 @onready var audio_player: AudioStreamPlayer3D = $PlayerAudio
-@onready var speed_label: Label = $Neck/Camera3D/SpeedLabel
+@onready var debug_label: Label = $Neck/Camera3D/DebugLabel
 @onready var dash_timer: Timer = $DashTimer
 @onready var neck: Node3D = $Neck
 
@@ -99,7 +102,8 @@ func _physics_process(delta):
 	velocity += velocity.normalized() * bonus_speed
 	var h_speed = snapped(vel_horizontal.length() + bonus_speed, 0.1)
 	var v_speed = snapped(vel_vertical, 0.1)
-	speed_label.text = "HSpeed: {0} u/s\nVSpeed: {1} u/s".format([h_speed, v_speed])
+	debug_label.text = "HSpeed: {0} u/s\nVSpeed: {1} u/s".format([h_speed, v_speed])
+	debug_label.text += "\nOn ground: {0}\nOn wall: {1}".format([is_on_floor(), is_on_wall_only()])
 	move_and_slide()
 
 	var gun_sway_velocity = velocity * transform.basis
