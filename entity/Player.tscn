@@ -75,7 +75,8 @@ target_position = Vector3(0, -0.5, 0)
 [node name="PlayerAudio" type="AudioStreamPlayer3D" parent="."]
 volume_db = -24.0
 
-[node name="DashTimer" type="Timer" parent="."]
+[node name="DashDuration" type="Timer" parent="."]
+editor_description = "How long the dash action last"
 wait_time = 0.2
 one_shot = true
 
@@ -120,4 +121,4 @@ script = ExtResource("10_g5bf6")
 to = NodePath("../../Grounded")
 event = &"grounded"
 
-[connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]
+[connection signal="timeout" from="DashDuration" to="." method="_on_dash_duration_timeout"]

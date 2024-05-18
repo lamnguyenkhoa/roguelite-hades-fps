@@ -36,13 +36,6 @@ offset_bottom = 265.0
 theme = ExtResource("3_n1xun")
 initial_node_to_watch = NodePath("../NinjaFrog")
 
-[node name="StateChartDebugger" parent="StateChartDebugger" instance=ExtResource("3_fqmqq")]
-modulate = Color(1, 1, 1, 0.572549)
-z_index = 40
-layout_mode = 2
-theme = ExtResource("3_n1xun")
-initial_node_to_watch = NodePath("../NinjaFrog")
-
 [node name="Checkpoint" parent="." instance=ExtResource("6_spkwb")]
 position = Vector2(409, 369)
 

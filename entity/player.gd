@@ -4,11 +4,13 @@ class_name Player
 @export var can_wall_jump: bool # This will include wallslide
 @export var can_wall_run: bool
 
+@export var dash_cd = 0.5
+
 @onready var player_camera: Camera3D = $Neck/Camera3D
 @onready var ground_raycast: RayCast3D = $RayCast3D
 @onready var audio_player: AudioStreamPlayer3D = $PlayerAudio
 @onready var debug_label: Label = $Neck/Camera3D/DebugLabel
-@onready var dash_timer: Timer = $DashTimer
+@onready var dash_duration_timer: Timer = $DashDuration
 @onready var neck: Node3D = $Neck
 @onready var state_chart: StateChart = $StateChart
 
@@ -40,12 +42,14 @@ var raw_input_dir = Vector2(0, 0)
 var input_dir = Vector2(0, 0)
 
 var gun_container_offset: Vector3
+var last_dashed_timestamp
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	prev_pos = player_camera.position
 	camera_height = player_camera.position.y
 	gun_container_offset = gun_container.position
+	last_dashed_timestamp = Time.get_ticks_msec() - dash_cd * 1000
 
 func _input(event):
 	if event is InputEventMouseMotion:
@@ -55,9 +59,11 @@ func _input(event):
 		jumped = true
 		state_chart.send_event("jump")
 	if event.is_action_pressed("dash"):
-		is_dashing = true
-		vel_vertical = 0
-		dash_timer.start()
+		if last_dashed_timestamp + dash_cd * 1000 <= Time.get_ticks_msec():
+			last_dashed_timestamp = Time.get_ticks_msec()
+			is_dashing = true
+			vel_vertical = 0
+			dash_duration_timer.start()
 	if event.is_action_pressed("primary_attack"):
 		primary_attack()
 	if event.is_action_pressed("secondary_attack"):
@@ -162,8 +168,5 @@ func camera_tilt(delta):
 	else:
 		neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(0), delta * 5)
 
-func _on_dash_timer_timeout() -> void:
+func _on_dash_duration_timeout() -> void:
 	is_dashing = false
-
-func _on_grounded_state_input(event: InputEvent) -> void:
-	pass # Replace with function body.
