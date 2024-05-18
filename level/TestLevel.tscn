@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bmm57jx2oq6fb"]
+[gd_scene load_steps=6 format=3 uid="uid://bmm57jx2oq6fb"]
 
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://entity/Player.tscn" id="1_i0lhh"]
 [ext_resource type="Material" uid="uid://p2sj02iixgy2" path="res://material/grid_mat.tres" id="2_32h3k"]
 [ext_resource type="Material" uid="uid://ckee7r277nvyg" path="res://material/grid_mat2.tres" id="3_mqr0u"]
 [ext_resource type="Environment" uid="uid://bnsi5blt3qbue" path="res://level/world_environment.tres" id="4_tl54g"]
+[ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="5_cqfjv"]
 
 [node name="TestLevel" type="Node3D"]
 
@@ -51,3 +52,13 @@ material = ExtResource("3_mqr0u")
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.870616, 4.6154, 5.74589)
 light_energy = 12.798
 spot_range = 20.0
+
+[node name="StateChartDebugger" parent="." instance=ExtResource("5_cqfjv")]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_bottom = 0.0
+offset_left = -376.0
+offset_bottom = 256.0
+grow_horizontal = 0
+grow_vertical = 1
+initial_node_to_watch = NodePath("../Player")

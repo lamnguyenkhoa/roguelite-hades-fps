@@ -10,6 +10,7 @@ class_name Player
 @onready var debug_label: Label = $Neck/Camera3D/DebugLabel
 @onready var dash_timer: Timer = $DashTimer
 @onready var neck: Node3D = $Neck
+@onready var state_chart: StateChart = $StateChart
 
 @onready var gun_container = $Neck/Camera3D/GunContainer
 @onready var aim_ray: RayCast3D = $Neck/Camera3D/AimRay
@@ -52,6 +53,7 @@ func _input(event):
 	if event.is_action_pressed("jump") and is_on_floor():
 		vel_vertical = JUMP_FORCE
 		jumped = true
+		state_chart.send_event("jump")
 	if event.is_action_pressed("dash"):
 		is_dashing = true
 		vel_vertical = 0
@@ -77,12 +79,14 @@ func _physics_process(delta):
 		vel_horizontal = Vector2.ZERO
 
 	if is_on_floor():
+		state_chart.send_event("grounded")
 		if vel_vertical < - 1:
 			audio_player.stream = landing_sfx
 			audio_player.play()
 			jumped = false
 			vel_vertical = 0
 	else:
+		state_chart.send_event("airborne")
 		if not is_dashing:
 			vel_vertical -= GRAVITY * delta
 			vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
@@ -160,3 +164,6 @@ func camera_tilt(delta):
 
 func _on_dash_timer_timeout() -> void:
 	is_dashing = false
+
+func _on_grounded_state_input(event: InputEvent) -> void:
+	pass # Replace with function body.
