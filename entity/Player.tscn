@@ -32,7 +32,7 @@ current = true
 fov = 90.0
 near = 0.02
 
-[node name="TextureRect" type="TextureRect" parent="Neck/Camera3D"]
+[node name="AimRecticle" type="TextureRect" parent="Neck/Camera3D"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -51,6 +51,7 @@ offset_left = 8.0
 offset_top = 8.0
 offset_right = 192.0
 offset_bottom = 64.0
+theme_override_font_sizes/font_size = 12
 text = "VSpeed: 0 u/s
 HSpeed: 0 u/s"
 
@@ -124,4 +125,5 @@ event = &"grounded"
 [connection signal="timeout" from="DashDuration" to="." method="_on_dash_duration_timeout"]
 [connection signal="state_input" from="StateChart/Root/Grounded" to="." method="_on_grounded_state_input"]
 [connection signal="state_physics_processing" from="StateChart/Root/Grounded" to="." method="_on_grounded_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Airborne" to="." method="_on_airborne_state_entered"]
 [connection signal="state_input" from="StateChart/Root/Airborne" to="." method="_on_airborne_state_input"]
