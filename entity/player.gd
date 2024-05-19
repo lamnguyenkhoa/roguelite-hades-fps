@@ -5,6 +5,7 @@ class_name Player
 @export var can_wall_run: bool
 
 @export var dash_cd = 0.5
+@export var max_air_jump = 2
 
 @onready var player_camera: Camera3D = $Neck/Camera3D
 @onready var ground_raycast: RayCast3D = $RayCast3D
@@ -43,6 +44,7 @@ var input_dir = Vector2(0, 0)
 
 var gun_container_offset: Vector3
 var last_dashed_timestamp
+var current_air_jump_count = 0
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -55,9 +57,7 @@ func _input(event):
 	if event is InputEventMouseMotion:
 		rotate_player(event)
 	if event.is_action_pressed("jump") and is_on_floor():
-		vel_vertical = JUMP_FORCE
-		jumped = true
-		state_chart.send_event("jump")
+		jump()
 	if event.is_action_pressed("dash"):
 		if last_dashed_timestamp + dash_cd * 1000 <= Time.get_ticks_msec():
 			last_dashed_timestamp = Time.get_ticks_msec()
@@ -86,6 +86,7 @@ func _physics_process(delta):
 
 	if is_on_floor():
 		state_chart.send_event("grounded")
+		current_air_jump_count = 0
 		if vel_vertical < - 1:
 			audio_player.stream = landing_sfx
 			audio_player.play()
@@ -114,12 +115,18 @@ func _physics_process(delta):
 	var v_speed = snapped(vel_vertical, 0.1)
 	debug_label.text = "HSpeed: {0} u/s\nVSpeed: {1} u/s".format([h_speed, v_speed])
 	debug_label.text += "\nOn ground: {0}\nOn wall: {1}".format([is_on_floor(), is_on_wall_only()])
+	debug_label.text += "\nAir jumps left: {0}".format([max_air_jump - current_air_jump_count])
 	move_and_slide()
 
 	var gun_sway_velocity = velocity * transform.basis
 	gun_container.position = lerp(gun_container.position, gun_container_offset - (gun_sway_velocity / 500), delta * 10)
 
 	camera_tilt(delta)
+
+func jump():
+	vel_vertical = JUMP_FORCE
+	jumped = true
+	state_chart.send_event("jump")
 
 func primary_attack():
 	var gun: Gun = gun_container.get_child(0)
@@ -170,3 +177,9 @@ func camera_tilt(delta):
 
 func _on_dash_duration_timeout() -> void:
 	is_dashing = false
+
+
+func _on_airborne_state_input(event:InputEvent):
+	if event.is_action_pressed("jump") and current_air_jump_count < max_air_jump:
+		current_air_jump_count += 1
+		jump()
