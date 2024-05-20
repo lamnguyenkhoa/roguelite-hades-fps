@@ -24,6 +24,11 @@ shape = SubResource("CapsuleShape3D_f0s2u")
 visible = false
 mesh = SubResource("CapsuleMesh_o6vus")
 
+[node name="WallRaycast" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, -1)
+debug_shape_custom_color = Color(1, 0.988235, 0, 1)
+debug_shape_thickness = 5
+
 [node name="Neck" type="Node3D" parent="."]
 
 [node name="Camera3D" type="Camera3D" parent="Neck"]
@@ -68,10 +73,6 @@ collide_with_areas = true
 
 [node name="AimRayEnd" type="Marker3D" parent="Neck/Camera3D/AimRay"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -101)
-
-[node name="RayCast3D" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.948596, 0)
-target_position = Vector3(0, -0.5, 0)
 
 [node name="PlayerAudio" type="AudioStreamPlayer3D" parent="."]
 volume_db = -24.0
@@ -127,3 +128,4 @@ event = &"grounded"
 [connection signal="state_physics_processing" from="StateChart/Root/Grounded" to="." method="_on_grounded_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Airborne" to="." method="_on_airborne_state_entered"]
 [connection signal="state_input" from="StateChart/Root/Airborne" to="." method="_on_airborne_state_input"]
+[connection signal="state_physics_processing" from="StateChart/Root/Airborne" to="." method="_on_airborne_state_physics_processing"]

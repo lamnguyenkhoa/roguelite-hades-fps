@@ -85,4 +85,5 @@ crouch={
 [layer_names]
 
 3d_render/layer_2="Layer 2"
+3d_physics/layer_1="Building"
 3d_physics/layer_2="Enemy"
