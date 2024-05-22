@@ -30,6 +30,7 @@ const GRAVITY = 14
 
 const DASH_SPEED = 15
 const SLIDE_SPEED = 5
+const SLAM_SPEED = 25
 
 var floor_col_pos = Vector3.ZERO
 var jumped = false
@@ -45,6 +46,7 @@ var gun_container_offset: Vector3
 var last_dashed_timestamp
 var current_air_jump_count = 0
 var slide_dir = Vector2(0, 0)
+var just_slammed = false
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -121,7 +123,7 @@ func _physics_process(delta):
 	show_debug_label()
 	var gun_sway_velocity = velocity * transform.basis
 	gun_container.position = lerp(gun_container.position, gun_container_offset - (gun_sway_velocity / 500), delta * 10)
-	camera_tilt(delta)
+	camera_control(delta)
 
 func play_sfx(sfx: AudioStream):
 	audio_player.stream = sfx
@@ -176,7 +178,8 @@ func rotate_player(event):
 	player_camera.rotation.z = 0
 	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad( - 80), deg_to_rad(80))
 
-func camera_tilt(delta):
+func camera_control(delta):
+	# Tilt camera
 	if raw_input_dir.x < 0:
 		neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(3.0), delta * 5)
 	elif raw_input_dir.x > 0:
@@ -184,10 +187,16 @@ func camera_tilt(delta):
 	else:
 		neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(0), delta * 5)
 
+	# Lower camera
 	if is_sliding:
 		neck.position.y = lerp(neck.position.y, -1.0, delta * 5)
 	else:
 		neck.position.y = lerp(neck.position.y, 0.0, delta * 5)
+
+func ground_slam():
+	vel_horizontal = Vector2.ZERO
+	vel_vertical -= SLAM_SPEED
+	just_slammed = true
 
 func _on_dash_duration_timeout() -> void:
 	is_dashing = false
@@ -208,10 +217,13 @@ func _on_airborne_state_input(event: InputEvent):
 			jump()
 
 func _on_grounded_state_physics_processing(_delta: float):
-	if Input.is_action_pressed("crouch"):
+	if Input.is_action_pressed("crouch") and not just_slammed:
 		is_sliding = true
 	else:
 		is_sliding = false
+
+	if Input.is_action_just_released("crouch") and just_slammed:
+		just_slammed = false
 
 func _on_airborne_state_entered() -> void:
 	is_sliding = false
@@ -222,6 +234,8 @@ func _on_airborne_state_physics_processing(delta: float) -> void:
 	if moving_toward_wall() and can_wall_cling:
 		vel_vertical = clampf(vel_vertical, -1, 10000)
 	vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
+	if Input.is_action_just_pressed("crouch"):
+		ground_slam()
 
 func moving_toward_wall() -> bool:
 	wall_raycast.target_position = Vector3(raw_input_dir.x, 0, raw_input_dir.y)
