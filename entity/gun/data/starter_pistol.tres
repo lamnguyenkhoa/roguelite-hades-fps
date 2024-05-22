@@ -12,3 +12,4 @@ firerate = 2.4
 projectile_speed = 0.0
 is_hitscan = true
 secondary_not_attack = true
+camera_shake_trauma = 0.4

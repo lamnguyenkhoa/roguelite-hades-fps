@@ -6,17 +6,17 @@ class_name Player
 @export var max_air_jump = 2
 @export var dash_cd = 0.5
 
-@onready var player_camera: Camera3D = $Neck/Camera3D
+@onready var player_camera: ShakeableCamera = $Neck/ShakeableCamera
 @onready var audio_player: AudioStreamPlayer3D = $PlayerAudio
-@onready var debug_label: Label = $Neck/Camera3D/DebugLabel
+@onready var debug_label: Label = $Neck/ShakeableCamera/DebugLabel
 @onready var dash_duration_timer: Timer = $DashDuration
 @onready var neck: Node3D = $Neck
 @onready var state_chart: StateChart = $StateChart
 @onready var wall_raycast: RayCast3D = $WallRaycast
 
-@onready var gun_container = $Neck/Camera3D/GunContainer
-@onready var aim_ray: RayCast3D = $Neck/Camera3D/AimRay
-@onready var aim_ray_end: Marker3D = $Neck/Camera3D/AimRay/AimRayEnd
+@onready var gun_container = $Neck/ShakeableCamera/GunContainer
+@onready var aim_ray: RayCast3D = $Neck/ShakeableCamera/AimRay
+@onready var aim_ray_end: Marker3D = $Neck/ShakeableCamera/AimRay/AimRayEnd
 
 var landing_sfx = preload ("res://asset/sfx/jump_landing.wav")
 
@@ -27,6 +27,9 @@ const JUMP_FORCE = 8
 const RAY_REACH = 0.1
 const MOUSE_SENS = 0.005
 const GRAVITY = 14
+const FALL_SPEED_TO_SHAKE_CAMERA = 15
+const HEAVY_FALL_SHAKE_TRAUMA = 0.8
+const SLIDE_SHAKE_TRAUMA = 0.1
 
 const DASH_SPEED = 15
 const SLIDE_SPEED = 5
@@ -37,7 +40,14 @@ var jumped = false
 var vel_horizontal = Vector2(0, 0)
 var vel_vertical = 0
 var is_dashing = false
-var is_sliding = false
+var is_sliding:
+	set(value):
+		if value != is_sliding:
+			if value:
+				player_camera.add_long_trauma(SLIDE_SHAKE_TRAUMA)
+			else:
+				player_camera.add_long_trauma( - SLIDE_SHAKE_TRAUMA)
+		is_sliding = value
 var bonus_speed = 0
 var raw_input_dir = Vector2(0, 0)
 var input_dir = Vector2(0, 0)
@@ -46,7 +56,6 @@ var gun_container_offset: Vector3
 var last_dashed_timestamp
 var current_air_jump_count = 0
 var slide_dir = Vector2(0, 0)
-var just_slammed = false
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -68,7 +77,7 @@ func _input(event):
 		secondary_attack()
 
 func _physics_process(delta):
-	if is_dashing or is_sliding:
+	if is_dashing:
 		if raw_input_dir == Vector2.ZERO:
 			raw_input_dir = Vector2(0, -1)
 			input_dir = raw_input_dir.rotated( - rotation.y)
@@ -87,6 +96,8 @@ func _physics_process(delta):
 		state_chart.send_event("grounded")
 		current_air_jump_count = 0
 		if vel_vertical < 0:
+			if vel_vertical < - FALL_SPEED_TO_SHAKE_CAMERA:
+				player_camera.add_trauma(HEAVY_FALL_SHAKE_TRAUMA)
 			play_sfx(landing_sfx)
 			jumped = false
 			vel_vertical = 0
@@ -161,6 +172,7 @@ func secondary_attack():
 		perform_attack(gun)
 
 func perform_attack(gun: Gun):
+	player_camera.add_trauma(gun.gun_resource.camera_shake_trauma)
 	var bullet_inst: GunHitscan = gun.bullet_trail.instantiate()
 	if aim_ray.is_colliding():
 		bullet_inst.init(gun.barrel.global_position, aim_ray.get_collision_point())
@@ -196,7 +208,6 @@ func camera_control(delta):
 func ground_slam():
 	vel_horizontal = Vector2.ZERO
 	vel_vertical -= SLAM_SPEED
-	just_slammed = true
 
 func _on_dash_duration_timeout() -> void:
 	is_dashing = false
@@ -217,13 +228,10 @@ func _on_airborne_state_input(event: InputEvent):
 			jump()
 
 func _on_grounded_state_physics_processing(_delta: float):
-	if Input.is_action_pressed("crouch") and not just_slammed:
+	if Input.is_action_pressed("crouch") and raw_input_dir != Vector2.ZERO:
 		is_sliding = true
 	else:
 		is_sliding = false
-
-	if Input.is_action_just_released("crouch") and just_slammed:
-		just_slammed = false
 
 func _on_airborne_state_entered() -> void:
 	is_sliding = false
