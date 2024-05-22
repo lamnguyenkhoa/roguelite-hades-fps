@@ -1,11 +1,10 @@
 extends CharacterBody3D
 class_name Player
 
-@export var can_wall_jump: bool # This will include wallslide
-@export var can_wall_run: bool
-
-@export var dash_cd = 0.5
+@export var can_wall_jump: bool
+@export var can_wall_cling: bool
 @export var max_air_jump = 2
+@export var dash_cd = 0.5
 
 @onready var player_camera: Camera3D = $Neck/Camera3D
 @onready var audio_player: AudioStreamPlayer3D = $PlayerAudio
@@ -199,11 +198,11 @@ func _on_grounded_state_input(event: InputEvent):
 
 func _on_airborne_state_input(event: InputEvent):
 	if event.is_action_pressed("jump"):
-		if moving_toward_wall():
+		if moving_toward_wall() and can_wall_jump:
 			var wall_normal = get_wall_normal()
 			# Jump away from wall
-			vel_horizontal += Vector2(wall_normal.x, wall_normal.z) * 18
-			jump(1.2)
+			vel_horizontal += Vector2(wall_normal.x, wall_normal.z) * 16
+			jump(0.8)
 		elif current_air_jump_count < max_air_jump:
 			current_air_jump_count += 1
 			jump()
@@ -220,7 +219,7 @@ func _on_airborne_state_entered() -> void:
 func _on_airborne_state_physics_processing(delta: float) -> void:
 	if not is_dashing:
 		vel_vertical -= GRAVITY * delta
-	if moving_toward_wall():
+	if moving_toward_wall() and can_wall_cling:
 		vel_vertical = clampf(vel_vertical, -1, 10000)
 	vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
 
