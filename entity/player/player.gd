@@ -30,6 +30,7 @@ const GRAVITY = 14
 const FALL_SPEED_TO_SHAKE_CAMERA = 15
 const HEAVY_FALL_SHAKE_TRAUMA = 0.8
 const SLIDE_SHAKE_TRAUMA = 0.1
+const MIN_HEIGHT_TO_SLAM = 1.5
 
 const DASH_SPEED = 15
 const SLIDE_SPEED = 5
@@ -144,7 +145,9 @@ func play_sfx(sfx: AudioStream):
 func show_debug_label():
 	var h_speed = snapped(Vector3(velocity.x, 0, velocity.z).length(), 0.1)
 	var v_speed = snapped(vel_vertical, 0.1)
+	var snapped_height = snapped(global_position.y, 0.1)
 	debug_label.text = "HSpeed: {0} u/s\nVSpeed: {1} u/s".format([h_speed, v_speed])
+	debug_label.text += "\nHeight from ground: {0}".format([snapped_height - 1.5])
 	debug_label.text += "\nOn ground: {0} | wall-cling: {1}".format([is_on_floor(), moving_toward_wall()])
 	debug_label.text += "\nIs dashing: {0} | Is sliding: {1}".format([is_dashing, is_sliding])
 	debug_label.text += "\nAir jumps left: {0}".format([max_air_jump - current_air_jump_count])
@@ -169,9 +172,9 @@ func secondary_attack():
 		return
 	gun.play_secondary_attack_anim()
 	if not gun.gun_resource.secondary_not_attack:
-		perform_attack(gun)
+		perform_attack(gun, true)
 
-func perform_attack(gun: Gun):
+func perform_attack(gun: Gun, _is_secondary: bool=false):
 	player_camera.add_trauma(gun.gun_resource.camera_shake_trauma)
 	var bullet_inst: GunHitscan = gun.bullet_trail.instantiate()
 	if aim_ray.is_colliding():
@@ -206,6 +209,9 @@ func camera_control(delta):
 		neck.position.y = lerp(neck.position.y, 0.0, delta * 5)
 
 func ground_slam():
+	var test_motion = Vector3(0, -MIN_HEIGHT_TO_SLAM, 0)
+	if move_and_collide(test_motion, true):
+		return
 	vel_horizontal = Vector2.ZERO
 	vel_vertical -= SLAM_SPEED
 
