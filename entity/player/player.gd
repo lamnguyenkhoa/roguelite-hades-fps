@@ -10,6 +10,7 @@ class_name Player
 @onready var audio_player: AudioStreamPlayer3D = $PlayerAudio
 @onready var debug_label: Label = $Neck/ShakeableCamera/DebugLabel
 @onready var dash_duration_timer: Timer = $DashDuration
+@onready var coyote_timer: Timer = $CoyoteTimer
 @onready var neck: Node3D = $Neck
 @onready var state_chart: StateChart = $StateChart
 @onready var wall_raycast: RayCast3D = $WallRaycast
@@ -38,6 +39,7 @@ const SLAM_SPEED = 25
 
 var floor_col_pos = Vector3.ZERO
 var jumped = false
+var can_coyote_jump = false
 var vel_horizontal = Vector2(0, 0)
 var vel_vertical = 0
 var is_dashing = false
@@ -151,6 +153,7 @@ func show_debug_label():
 	debug_label.text += "\nOn ground: {0} | wall-cling: {1}".format([is_on_floor(), moving_toward_wall()])
 	debug_label.text += "\nIs dashing: {0} | Is sliding: {1}".format([is_dashing, is_sliding])
 	debug_label.text += "\nAir jumps left: {0}".format([max_air_jump - current_air_jump_count])
+	debug_label.text += "\nCoyote jump: {0}".format([can_coyote_jump])
 
 func jump(multiplier=1.0):
 	vel_vertical = JUMP_FORCE * multiplier
@@ -224,7 +227,9 @@ func _on_grounded_state_input(event: InputEvent):
 
 func _on_airborne_state_input(event: InputEvent):
 	if event.is_action_pressed("jump"):
-		if moving_toward_wall() and can_wall_jump:
+		if can_coyote_jump and not jumped:
+			jump()
+		elif moving_toward_wall() and can_wall_jump:
 			var wall_normal = get_wall_normal()
 			# Jump away from wall
 			vel_horizontal += Vector2(wall_normal.x, wall_normal.z) * 16
@@ -241,13 +246,19 @@ func _on_grounded_state_physics_processing(_delta: float):
 
 func _on_airborne_state_entered() -> void:
 	is_sliding = false
+	if not jumped:
+		coyote_timer.start()
+		can_coyote_jump = true
+
 
 func _on_airborne_state_physics_processing(delta: float) -> void:
 	if not is_dashing:
 		vel_vertical -= GRAVITY * delta
+	vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
 	if moving_toward_wall() and can_wall_cling:
 		vel_vertical = clampf(vel_vertical, -1, 10000)
-	vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
+		jumped = false
+
 	if Input.is_action_just_pressed("crouch"):
 		ground_slam()
 
@@ -256,3 +267,6 @@ func moving_toward_wall() -> bool:
 	if is_on_wall_only() and wall_raycast.is_colliding():
 		return true
 	return false
+
+func _on_coyote_timer_timeout():
+	can_coyote_jump = false
