@@ -225,24 +225,19 @@ func _on_grounded_state_input(event: InputEvent):
 	if event.is_action_pressed("jump"):
 		jump()
 
-func _on_airborne_state_input(event: InputEvent):
-	if event.is_action_pressed("jump"):
-		if can_coyote_jump and not jumped:
-			jump()
-		elif moving_toward_wall() and can_wall_jump:
-			var wall_normal = get_wall_normal()
-			# Jump away from wall
-			vel_horizontal += Vector2(wall_normal.x, wall_normal.z) * 16
-			jump(0.8)
-		elif current_air_jump_count < max_air_jump:
-			current_air_jump_count += 1
-			jump()
-
 func _on_grounded_state_physics_processing(_delta: float):
 	if Input.is_action_pressed("crouch") and raw_input_dir != Vector2.ZERO:
 		is_sliding = true
 	else:
 		is_sliding = false
+
+func _on_airborne_state_input(event: InputEvent):
+	if event.is_action_pressed("jump"):
+		if can_coyote_jump and not jumped:
+			jump()
+		elif current_air_jump_count < max_air_jump:
+			current_air_jump_count += 1
+			jump()
 
 func _on_airborne_state_entered() -> void:
 	is_sliding = false
@@ -250,17 +245,14 @@ func _on_airborne_state_entered() -> void:
 		coyote_timer.start()
 		can_coyote_jump = true
 
-
 func _on_airborne_state_physics_processing(delta: float) -> void:
 	if not is_dashing:
 		vel_vertical -= GRAVITY * delta
 	vel_vertical = clamp(vel_vertical, -MAX_FALL_SPEED, 10000)
-	if moving_toward_wall() and can_wall_cling:
-		vel_vertical = clampf(vel_vertical, -1, 10000)
-		jumped = false
-
 	if Input.is_action_just_pressed("crouch"):
 		ground_slam()
+	if moving_toward_wall() and can_wall_cling:
+		state_chart.send_event("wallcling")
 
 func moving_toward_wall() -> bool:
 	wall_raycast.target_position = Vector3(raw_input_dir.x, 0, raw_input_dir.y)
@@ -270,3 +262,20 @@ func moving_toward_wall() -> bool:
 
 func _on_coyote_timer_timeout():
 	can_coyote_jump = false
+
+func _on_wallcling_state_entered() -> void:
+	jumped = false
+
+func _on_wallcling_state_physics_processing(delta: float) -> void:
+	if raw_input_dir.y == 0 or not is_on_wall_only():
+		state_chart.send_event("stop_wallcling")
+	vel_vertical -= GRAVITY * delta
+	vel_vertical = clampf(vel_vertical, -1, 10000)
+
+func _on_wallcling_state_input(event: InputEvent) -> void:
+	if event.is_action_pressed("jump"):
+		if can_wall_jump:
+			var wall_normal = get_wall_normal()
+			# Jump away from wall
+			vel_horizontal += Vector2(wall_normal.x, wall_normal.z) * 16
+			jump(0.8)

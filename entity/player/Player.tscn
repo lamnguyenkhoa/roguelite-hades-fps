@@ -108,13 +108,13 @@ initial_state = NodePath("Grounded")
 editor_description = "This state is active when the player is on the ground."
 script = ExtResource("8_dkhcu")
 
-[node name="OnJump" type="Node" parent="StateChart/Root/Grounded"]
+[node name="onJump" type="Node" parent="StateChart/Root/Grounded"]
 editor_description = "When jumping become airborne and enable double-jump."
 script = ExtResource("10_g5bf6")
 to = NodePath("../../Airborne")
 event = &"jump"
 
-[node name="OnAirborne" type="Node" parent="StateChart/Root/Grounded"]
+[node name="onAirborne" type="Node" parent="StateChart/Root/Grounded"]
 editor_description = "When becoming airborne (e.g. through falling) move to airborne state."
 script = ExtResource("10_g5bf6")
 to = NodePath("../../Airborne")
@@ -123,10 +123,23 @@ event = &"airborne"
 [node name="Airborne" type="Node" parent="StateChart/Root"]
 script = ExtResource("8_dkhcu")
 
-[node name="OnGrounded" type="Node" parent="StateChart/Root/Airborne"]
+[node name="onGrounded" type="Node" parent="StateChart/Root/Airborne"]
 script = ExtResource("10_g5bf6")
 to = NodePath("../../Grounded")
 event = &"grounded"
+
+[node name="onWallcling" type="Node" parent="StateChart/Root/Airborne"]
+script = ExtResource("10_g5bf6")
+to = NodePath("../../Wallcling")
+event = &"wallcling"
+
+[node name="Wallcling" type="Node" parent="StateChart/Root"]
+script = ExtResource("8_dkhcu")
+
+[node name="onStopWallcling" type="Node" parent="StateChart/Root/Wallcling"]
+script = ExtResource("10_g5bf6")
+to = NodePath("../../Airborne")
+event = &"stop_wallcling"
 
 [connection signal="timeout" from="DashDuration" to="." method="_on_dash_duration_timeout"]
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_coyote_timer_timeout"]
@@ -135,3 +148,6 @@ event = &"grounded"
 [connection signal="state_entered" from="StateChart/Root/Airborne" to="." method="_on_airborne_state_entered"]
 [connection signal="state_input" from="StateChart/Root/Airborne" to="." method="_on_airborne_state_input"]
 [connection signal="state_physics_processing" from="StateChart/Root/Airborne" to="." method="_on_airborne_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Wallcling" to="." method="_on_wallcling_state_entered"]
+[connection signal="state_input" from="StateChart/Root/Wallcling" to="." method="_on_wallcling_state_input"]
+[connection signal="state_physics_processing" from="StateChart/Root/Wallcling" to="." method="_on_wallcling_state_physics_processing"]
