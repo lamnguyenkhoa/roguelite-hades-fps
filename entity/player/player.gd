@@ -5,6 +5,7 @@ class_name Player
 @export var can_wall_cling: bool
 @export var max_air_jump = 2
 @export var dash_cd = 0.5
+@export var bounce_ray_prefab: PackedScene
 
 @onready var player_camera: ShakeableCamera = $Neck/ShakeableCamera
 @onready var audio_player: AudioStreamPlayer3D = $PlayerAudio
@@ -196,46 +197,23 @@ func check_secondary_attack():
                 # TODO: gun secondary hold implementation
             else:
                 gun.set_animation_idle()
-            
 
-func perform_attack(gun: Gun, _is_secondary: bool=false, bounce_count = 0, _is_pierce = false):
+func perform_attack(gun: Gun, _is_secondary: bool=false, bounce_count=0, _is_pierce=false):
     player_camera.add_trauma(gun.gun_resource.camera_shake_trauma)
     var bullet_inst: GunHitscan = gun.bullet_trail.instantiate()
     if aim_ray.is_colliding():
         bullet_inst.init(gun.barrel.global_position, aim_ray.get_collision_point())
+        get_parent().add_child(bullet_inst)
         if aim_ray.get_collider().is_in_group("enemy"):
             # TODO: Damage enemy here
             return
 
+        # Do gun bounce thing
         if bounce_count > 0:
-            var bounce_ray: RayCast3D = aim_ray.duplicate()
-            var last_hit_position = aim_ray.get_collision_point()
-            var shot_direction = (aim_ray.get_collision_point() - gun.barrel.global_position).normalized()
-            player_camera.add_child(bounce_ray)
-            bounce_ray.global_position = aim_ray.global_position
-            bounce_ray.target_position = aim_ray.target_position
-
-            await get_tree().physics_frame
-            await get_tree().physics_frame
-
-            for i in range(bounce_count):
-                print("TEST", bounce_ray.target_position, aim_ray.target_position)
-                var collision_normal = bounce_ray.get_collision_normal()
-                print("AAAAAAA", collision_normal)
-                shot_direction = shot_direction.bounce(collision_normal)
-                bounce_ray.target_position = shot_direction * 100
-                bounce_ray.global_position = last_hit_position
-                if bounce_ray.is_colliding():
-                    var bounce_bullet_inst: GunHitscan = gun.bullet_trail.instantiate()
-                    bounce_bullet_inst.init(last_hit_position, bounce_ray.get_collision_point())
-                    last_hit_position = bounce_ray.get_collision_point()
-                else:
-                    break
-
-            bounce_ray.call_deferred("queue_free")
+            calculate_gun_bounce(aim_ray, gun.barrel.global_position, bounce_count, gun.bullet_trail)
     else:
         bullet_inst.init(gun.barrel.global_position, aim_ray_end.global_position)
-    get_parent().add_child(bullet_inst)
+        get_parent().add_child(bullet_inst)
 
 func rotate_player(event):
     rotate(Vector3(0, -1, 0), event.relative.x * (GameManager.mouse_sensitivity / 10000))
@@ -307,6 +285,38 @@ func moving_toward_wall() -> bool:
     if is_on_wall_only() and wall_raycast.is_colliding():
         return true
     return false
+
+func calculate_gun_bounce(_aim_ray: RayCast3D, gun_barrel_pos: Vector3, bounce_count: int, bullet_trail: PackedScene):
+    var bounce_ray: RayCast3D = bounce_ray_prefab.instantiate()
+    var bounce_ray_end = bounce_ray.get_node("AimRayEnd")
+    var last_hit_position = _aim_ray.get_collision_point()
+    var shot_direction = (_aim_ray.get_collision_point() - gun_barrel_pos).normalized()
+    get_parent().add_child(bounce_ray)
+    bounce_ray.look_at(bounce_ray.global_position + shot_direction)
+    bounce_ray.global_position = _aim_ray.global_position
+
+    await get_tree().physics_frame
+    await get_tree().physics_frame
+
+    for i in range(bounce_count):
+        var collision_normal = bounce_ray.get_collision_normal()
+        var bounce_bullet_inst: GunHitscan = bullet_trail.instantiate()
+        shot_direction = shot_direction.bounce(collision_normal)
+        bounce_ray.global_position = last_hit_position
+        bounce_ray.look_at(bounce_ray.global_position + shot_direction)
+
+        await get_tree().physics_frame
+        await get_tree().physics_frame
+        if bounce_ray.is_colliding():
+            bounce_bullet_inst.init(last_hit_position, bounce_ray.get_collision_point())
+            last_hit_position = bounce_ray.get_collision_point()
+            get_parent().add_child(bounce_bullet_inst)
+        else:
+            bounce_bullet_inst.init(last_hit_position, bounce_ray_end.global_position)
+            get_parent().add_child(bounce_bullet_inst)
+            break
+
+    bounce_ray.call_deferred("queue_free")
 
 func _on_coyote_timer_timeout():
     can_coyote_jump = false

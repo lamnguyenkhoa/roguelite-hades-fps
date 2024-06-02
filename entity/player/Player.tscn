@@ -1,10 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=14 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://entity/player/player.gd" id="1_rl0vi"]
 [ext_resource type="Texture2D" uid="uid://ctkoyf8rtxhqs" path="res://asset/ui/crosshair.png" id="2_tyg2i"]
 [ext_resource type="Texture2D" uid="uid://ddwxkjlbdh8hq" path="res://asset/sprite/blob_shadow.png" id="3_tgexf"]
 [ext_resource type="PackedScene" uid="uid://oai4dltwisn0" path="res://entity/gun/StarterPistol.tscn" id="3_wg1yd"]
 [ext_resource type="PackedScene" uid="uid://by6prw5q6j6sk" path="res://entity/player/ShakeableCamera.tscn" id="4_37fec"]
+[ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://entity/player/AimRay.tscn" id="5_dqbuo"]
 [ext_resource type="PackedScene" uid="uid://byj1y3wrwtdtq" path="res://ui/PauseUI.tscn" id="5_srijb"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="6_t33b7"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="7_1276k"]
@@ -20,6 +21,7 @@ script = ExtResource("1_rl0vi")
 can_wall_jump = true
 can_wall_cling = true
 max_air_jump = 0
+bounce_ray_prefab = ExtResource("5_dqbuo")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_f0s2u")
@@ -66,14 +68,7 @@ transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.051, -0.094821, -0
 
 [node name="StarterPistol" parent="Neck/ShakeableCamera/GunContainer" instance=ExtResource("3_wg1yd")]
 
-[node name="AimRay" type="RayCast3D" parent="Neck/ShakeableCamera"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000178993, -0.611622)
-target_position = Vector3(0, 0, -100)
-collision_mask = 3
-collide_with_areas = true
-
-[node name="AimRayEnd" type="Marker3D" parent="Neck/ShakeableCamera/AimRay"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -101)
+[node name="AimRay" parent="Neck/ShakeableCamera" instance=ExtResource("5_dqbuo")]
 
 [node name="PlayerAudio" type="AudioStreamPlayer3D" parent="."]
 volume_db = -24.0
