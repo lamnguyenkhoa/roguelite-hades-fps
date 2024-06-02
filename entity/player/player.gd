@@ -173,7 +173,7 @@ func check_primary_attack():
 
 func check_secondary_attack():
     var gun: Gun = gun_container.get_child(0)
-    match gun.gun_resource.secondary_type:
+    match gun.data.secondary_type:
         EnumAutoload.GunSecondaryAttackType.CLICK_ATTACK:
             if Input.is_action_just_pressed("secondary_attack") and gun.try_secondary_attack():
                 gun.play_secondary_attack_anim()
@@ -188,18 +188,24 @@ func check_secondary_attack():
                     gun.play_secondary_attack_anim()
                     # TODO: gun secondary hold implementation
         EnumAutoload.GunSecondaryAttackType.HOLD_AND_RELEASE:
-            if Input.is_action_pressed("secondary_attack"):
-                if not gun.check_if_animation_playing("secondary_attack"):
-                    gun.play_secondary_attack_anim()
-            elif Input.is_action_just_released("secondary_attack") and gun.try_secondary_attack():
-                gun.play_primary_attack_anim()
-                perform_attack(gun, true, gun.gun_resource.secondary_bounce_time, gun.gun_resource.secondary_pierce)
-                # TODO: gun secondary hold implementation
-            else:
-                gun.set_animation_idle()
+            if Input.is_action_pressed("secondary_attack") and gun.try_secondary_attack(true):
+                # Make sure only played once
+                if not gun.check_if_animation_playing("secondary_attack_hold"):
+                    gun.start_charge()
+                    gun.play_secondary_attack_hold_anim()
+            elif Input.is_action_just_released("secondary_attack"):
+                if gun.check_charge_time():
+                    if gun.try_secondary_attack():
+                        gun.play_secondary_attack_release_anim()
+                        perform_attack(gun, true, gun.data.secondary_bounce_time, gun.data.secondary_pierce)
+                        # TODO: gun secondary hold implementation
+                    else:
+                        gun.play_idle_anim()
+                else:
+                    gun.play_idle_anim()
 
 func perform_attack(gun: Gun, _is_secondary: bool=false, bounce_count=0, _is_pierce=false):
-    player_camera.add_trauma(gun.gun_resource.camera_shake_trauma)
+    player_camera.add_trauma(gun.data.camera_shake_trauma)
     var bullet_inst: GunHitscan = gun.bullet_trail.instantiate()
     if aim_ray.is_colliding():
         bullet_inst.init(gun.barrel.global_position, aim_ray.get_collision_point())
