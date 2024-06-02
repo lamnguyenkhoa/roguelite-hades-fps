@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+EnumAutoload="*res://singleton/enum_autoload.gd"
 GameManager="*res://singleton/GameManager.tscn"
 
 [display]

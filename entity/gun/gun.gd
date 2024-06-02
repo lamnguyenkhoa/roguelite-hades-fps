@@ -23,7 +23,20 @@ func try_primary_attack() -> bool:
     return false
 
 func try_secondary_attack() -> bool:
-    return true
+    if firerate_timer.is_stopped():
+        firerate_timer.start(1.0 / gun_resource.firerate)
+        return true
+    return false
+
+func set_animation_idle():
+    anim_player.play("idle")
+
 
 func _on_animation_player_animation_finished(_anim_name: StringName) -> void:
     anim_player.play("idle")
+
+func check_if_animation_playing(anim_name: String = ""):
+    if anim_name == "":
+        return anim_player.is_playing()
+    else:
+        return anim_player.is_playing() and anim_player.current_animation == anim_name
