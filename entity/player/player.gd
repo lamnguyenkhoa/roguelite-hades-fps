@@ -184,7 +184,7 @@ func check_secondary_attack():
                 # TODO: gun secondary nonattack implementation
         EnumAutoload.GunSecondaryAttackType.HOLD:
             if Input.is_action_pressed("secondary_attack") and gun.try_secondary_attack():
-                if not gun.check_if_animation_playing("secondary_attack"):
+                if not gun.check_if_animation_playing("secondary_attack_hold"):
                     gun.play_secondary_attack_anim()
                     # TODO: gun secondary hold implementation
         EnumAutoload.GunSecondaryAttackType.HOLD_AND_RELEASE:
@@ -205,8 +205,11 @@ func check_secondary_attack():
                     gun.play_idle_anim()
 
 func perform_attack(gun: Gun, _is_secondary: bool=false, bounce_count=0, _is_pierce=false):
+    var gun_projectile: PackedScene = gun.primary_projectile
+    if _is_secondary:
+        gun_projectile = gun.secondary_projetile
     player_camera.add_trauma(gun.data.camera_shake_trauma)
-    var bullet_inst: GunHitscan = gun.bullet_trail.instantiate()
+    var bullet_inst: BaseProjectile = gun_projectile.instantiate()
     if aim_ray.is_colliding():
         bullet_inst.init(gun.barrel.global_position, aim_ray.get_collision_point())
         get_parent().add_child(bullet_inst)
@@ -216,7 +219,7 @@ func perform_attack(gun: Gun, _is_secondary: bool=false, bounce_count=0, _is_pie
 
         # Do gun bounce thing
         if bounce_count > 0:
-            calculate_gun_bounce(aim_ray, gun.barrel.global_position, bounce_count, gun.bullet_trail)
+            calculate_gun_bounce(aim_ray, gun.barrel.global_position, bounce_count, gun_projectile)
     else:
         bullet_inst.init(gun.barrel.global_position, aim_ray_end.global_position)
         get_parent().add_child(bullet_inst)
@@ -292,7 +295,7 @@ func moving_toward_wall() -> bool:
         return true
     return false
 
-func calculate_gun_bounce(_aim_ray: RayCast3D, gun_barrel_pos: Vector3, bounce_count: int, bullet_trail: PackedScene):
+func calculate_gun_bounce(_aim_ray: RayCast3D, gun_barrel_pos: Vector3, bounce_count: int, gun_projectile: PackedScene):
     var bounce_ray: RayCast3D = bounce_ray_prefab.instantiate()
     var bounce_ray_end = bounce_ray.get_node("AimRayEnd")
     var last_hit_position = _aim_ray.get_collision_point()
@@ -306,7 +309,7 @@ func calculate_gun_bounce(_aim_ray: RayCast3D, gun_barrel_pos: Vector3, bounce_c
 
     for i in range(bounce_count):
         var collision_normal = bounce_ray.get_collision_normal()
-        var bounce_bullet_inst: GunHitscan = bullet_trail.instantiate()
+        var bounce_bullet_inst: GunHitscan = gun_projectile.instantiate()
         shot_direction = shot_direction.bounce(collision_normal)
         bounce_ray.global_position = last_hit_position
         bounce_ray.look_at(bounce_ray.global_position + shot_direction)

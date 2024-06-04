@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="GunResource" load_steps=2 format=3 uid="uid://dvpqi7d2j8ui7"]
+
+[ext_resource type="Script" path="res://entity/gun/gun_resource.gd" id="1_3kw1f"]
+
+[resource]
+script = ExtResource("1_3kw1f")
+name = "Vector SMG"
+description = "High firerate gun with a powerful secondary piercing attack.
+
+LMB: Fire array of hitscan shots.
+RMB: Charge up to fire a 3-times ricochet hitscan shot."
+damage = 2.0
+firerate = 10.0
+projectile_speed = 0.0
+is_hitscan = true
+camera_shake_trauma = 0.1
+primary_bounce_time = 0
+primary_pierce = false
+secondary_type = 1
+secondary_cooldown = 2.0
+secondary_charge_time = 0.0
+secondary_bounce_time = 0
+secondary_pierce = true

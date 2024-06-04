@@ -1,5 +1,7 @@
-extends MeshInstance3D
+extends BaseProjectile
 class_name GunHitscan
+
+@export var thickness = 4
 
 var alpha = 1.0
 
@@ -9,7 +11,7 @@ func _ready():
 	var dup_mat = material_override.duplicate()
 	material_override = dup_mat
 
-func init(pos1: Vector3, pos2: Vector3, thickness: float=4):
+func init(pos1: Vector3, pos2: Vector3):
 	self.scale = Vector3(0.01 * thickness, 0.01 * thickness, pos1.distance_to(pos2))
 	self.look_at_from_position((pos1 + pos2) / 2, pos2, Vector3.UP)
 

@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://na8rt7u4d18y"]
+
+[ext_resource type="Script" path="res://entity/gun/projectiles/gun_hitscan.gd" id="1_d3ewk"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qm4qf"]
+transparency = 1
+albedo_color = Color(1, 0.0823529, 0, 1)
+emission_enabled = true
+emission = Color(1, 0.0901961, 0, 1)
+emission_energy_multiplier = 5.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_yehfg"]
+
+[node name="GunBaseHitscan" type="MeshInstance3D"]
+material_override = SubResource("StandardMaterial3D_qm4qf")
+mesh = SubResource("BoxMesh_yehfg")
+script = ExtResource("1_d3ewk")
+thickness = 6
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

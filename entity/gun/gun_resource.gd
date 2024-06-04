@@ -6,9 +6,12 @@ class_name GunResource
 
 # Stat
 @export var damage: float
-@export var firerate: float # Bullet per second
-@export var projectile_speed: float # How fast bullet travel
-@export var is_hitscan: bool # If this ticked, ignore bullet_speed
+## Bullet per second
+@export var firerate: float
+## How fast bullet travel. Ignored if is_hitscan ticked
+@export var projectile_speed: float
+## Bullet is not a projectiles. Shot enemy instanly damaged. If this ticked, ignore projectile_speed
+@export var is_hitscan: bool
 @export var camera_shake_trauma: float = 0.2
 
 @export_group("Primary")

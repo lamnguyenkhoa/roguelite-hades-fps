@@ -2,7 +2,8 @@ extends Node3D
 class_name Gun
 
 @export var data: GunResource
-@export var bullet_trail: PackedScene
+@export var primary_projectile: PackedScene
+@export var secondary_projetile: PackedScene
 
 @onready var barrel: Marker3D = $Barrel
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
