@@ -60,11 +60,14 @@ var gun_container_offset: Vector3
 var last_dashed_timestamp
 var current_air_jump_count = 0
 var slide_dir = Vector2(0, 0)
+var current_gun_slot = 0
 
 func _ready():
     Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
     gun_container_offset = gun_container.position
     last_dashed_timestamp = Time.get_ticks_msec() - dash_cd * 1000
+    current_gun_slot = 0
+    swap_gun()
 
 func _input(event):
     if event is InputEventMouseMotion:
@@ -75,6 +78,12 @@ func _input(event):
             is_dashing = true
             vel_vertical = 0
             dash_duration_timer.start()
+    if event.is_action_pressed("weapon_slot_1"):
+        current_gun_slot = 0
+        swap_gun()
+    if event.is_action_pressed("weapon_slot_2"):
+        current_gun_slot = 1
+        swap_gun()
 
 func _process(_delta):
     check_primary_attack()
@@ -155,6 +164,7 @@ func show_debug_label():
     debug_label.text += "\nIs dashing: {0} | Is sliding: {1}".format([is_dashing, is_sliding])
     debug_label.text += "\nAir jumps left: {0}".format([max_air_jump - current_air_jump_count])
     debug_label.text += "\nCoyote jump: {0}".format([can_coyote_jump])
+    debug_label.text += "\nUsing gun: {0}".format([gun_container.get_child(current_gun_slot).data.name])
 
 func jump(multiplier=1.0):
     vel_vertical = JUMP_FORCE * multiplier
@@ -165,14 +175,14 @@ func jump(multiplier=1.0):
 
 func check_primary_attack():
     if Input.is_action_pressed("primary_attack"):
-        var gun: Gun = gun_container.get_child(0)
+        var gun: Gun = gun_container.get_child(current_gun_slot)
         if not gun.try_primary_attack():
             return
         gun.play_primary_attack_anim()
         perform_attack(gun)
 
 func check_secondary_attack():
-    var gun: Gun = gun_container.get_child(0)
+    var gun: Gun = gun_container.get_child(current_gun_slot)
     match gun.data.secondary_type:
         EnumAutoload.GunSecondaryAttackType.CLICK_ATTACK:
             if Input.is_action_just_pressed("secondary_attack") and gun.try_secondary_attack():
@@ -245,6 +255,11 @@ func camera_control(delta):
         neck.position.y = lerp(neck.position.y, -1.0, delta * 5)
     else:
         neck.position.y = lerp(neck.position.y, 0.0, delta * 5)
+
+func swap_gun():
+    for child in gun_container.get_children():
+        child.visible = false
+    gun_container.get_child(current_gun_slot).visible = true
 
 func ground_slam():
     var test_motion = Vector3(0, -MIN_HEIGHT_TO_SLAM, 0)

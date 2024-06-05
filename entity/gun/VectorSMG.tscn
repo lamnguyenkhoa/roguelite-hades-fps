@@ -145,7 +145,6 @@ metallic = 1.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4u5tl"]
 resource_name = "_defaultMat"
-albedo_color = Color(1, 1, 1, 1)
 metallic = 1.0
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_0mh35"]
@@ -391,8 +390,8 @@ tracks/2/keys = {
 "values": [Vector3(0, 3.14159, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_kxjq5"]
-resource_name = "secondary_attack_release"
+[sub_resource type="Animation" id="Animation_wfanj"]
+resource_name = "secondary_attack_hold"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -442,8 +441,8 @@ tracks/3/keys = {
 "values": [Vector3(0, 0, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_wfanj"]
-resource_name = "secondary_attack_hold"
+[sub_resource type="Animation" id="Animation_kxjq5"]
+resource_name = "secondary_attack_release"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
