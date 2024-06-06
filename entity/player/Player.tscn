@@ -65,7 +65,7 @@ text = "VSpeed: 0 u/s
 HSpeed: 0 u/s"
 
 [node name="GunContainer" type="Node3D" parent="Neck/ShakeableCamera"]
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.051, -0.094821, -0.185)
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.051, -0.1, -0.185)
 
 [node name="StarterPistol" parent="Neck/ShakeableCamera/GunContainer" instance=ExtResource("3_wg1yd")]
 

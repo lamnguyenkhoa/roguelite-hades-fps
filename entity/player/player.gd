@@ -33,6 +33,7 @@ const FALL_SPEED_TO_SHAKE_CAMERA = 15
 const HEAVY_FALL_SHAKE_TRAUMA = 0.8
 const SLIDE_SHAKE_TRAUMA = 0.1
 const MIN_HEIGHT_TO_SLAM = 1.5
+const SWAP_GUN_TIME = 0.3
 
 const DASH_SPEED = 15
 const SLIDE_SPEED = 5
@@ -56,18 +57,21 @@ var bonus_speed = 0
 var raw_input_dir = Vector2(0, 0)
 var input_dir = Vector2(0, 0)
 
-var gun_container_offset: Vector3
+var gun_container_original_pos: Vector3
 var last_dashed_timestamp
 var current_air_jump_count = 0
 var slide_dir = Vector2(0, 0)
 var current_gun_slot = 0
+var is_swapping_gun = false
 
 func _ready():
     Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-    gun_container_offset = gun_container.position
+    gun_container_original_pos = gun_container.position
     last_dashed_timestamp = Time.get_ticks_msec() - dash_cd * 1000
     current_gun_slot = 0
-    swap_gun()
+    for child in gun_container.get_children():
+        child.visible = false
+    gun_container.get_child(current_gun_slot).visible = true
 
 func _input(event):
     if event is InputEventMouseMotion:
@@ -78,16 +82,17 @@ func _input(event):
             is_dashing = true
             vel_vertical = 0
             dash_duration_timer.start()
-    if event.is_action_pressed("weapon_slot_1"):
+    if event.is_action_pressed("weapon_slot_1") and current_gun_slot != 0:
         current_gun_slot = 0
         swap_gun()
-    if event.is_action_pressed("weapon_slot_2"):
+    if event.is_action_pressed("weapon_slot_2") and current_gun_slot != 1:
         current_gun_slot = 1
         swap_gun()
 
 func _process(_delta):
-    check_primary_attack()
-    check_secondary_attack()
+    if not is_swapping_gun:
+        check_primary_attack()
+        check_secondary_attack()
 
 func _physics_process(delta):
     if is_dashing:
@@ -146,7 +151,8 @@ func _physics_process(delta):
 
     show_debug_label()
     var gun_sway_velocity = velocity * transform.basis
-    gun_container.position = lerp(gun_container.position, gun_container_offset - (gun_sway_velocity / 500), delta * 10)
+    if not is_swapping_gun:
+        gun_container.position = lerp(gun_container.position, gun_container_original_pos - (gun_sway_velocity / 500), delta * 10)
     camera_control(delta)
 
 func play_sfx(sfx: AudioStream):
@@ -257,9 +263,14 @@ func camera_control(delta):
         neck.position.y = lerp(neck.position.y, 0.0, delta * 5)
 
 func swap_gun():
+    var tween = get_tree().create_tween()
+    is_swapping_gun = true
+    tween.tween_property(gun_container, "position:y", -0.5, SWAP_GUN_TIME).set_trans(Tween.TRANS_LINEAR)
+    await get_tree().create_timer(SWAP_GUN_TIME * 1.5).timeout
     for child in gun_container.get_children():
         child.visible = false
     gun_container.get_child(current_gun_slot).visible = true
+    is_swapping_gun = false
 
 func ground_slam():
     var test_motion = Vector3(0, -MIN_HEIGHT_TO_SLAM, 0)
