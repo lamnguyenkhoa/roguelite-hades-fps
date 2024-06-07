@@ -34,6 +34,8 @@ const HEAVY_FALL_SHAKE_TRAUMA = 0.8
 const SLIDE_SHAKE_TRAUMA = 0.1
 const MIN_HEIGHT_TO_SLAM = 1.5
 const SWAP_GUN_TIME = 0.3
+const RECOIL_COEFFICIENT = 10
+const BULLET_SPAWN_POS_VARIATION = 10
 
 const DASH_SPEED = 15
 const SLIDE_SPEED = 5
@@ -220,14 +222,25 @@ func check_secondary_attack():
                 else:
                     gun.play_idle_anim()
 
-func perform_attack(gun: Gun, _is_secondary: bool=false, bounce_count=0, _is_pierce=false):
+func perform_attack(gun: Gun, is_secondary: bool=false, bounce_count=0, _is_pierce=false):
     var gun_projectile: PackedScene = gun.primary_projectile
-    if _is_secondary:
+    var screenshake_amount = gun.data.primary_screenshake
+    if is_secondary:
         gun_projectile = gun.secondary_projetile
-    player_camera.add_trauma(gun.data.camera_shake_trauma)
+        screenshake_amount = gun.data.secondary_screenshake
+    # Screenshake
+    player_camera.add_trauma(screenshake_amount)
+    # Recoil
+    player_camera.rotate_x(screenshake_amount / RECOIL_COEFFICIENT)
+    player_camera.rotate_y(randf_range( - screenshake_amount / RECOIL_COEFFICIENT, screenshake_amount / RECOIL_COEFFICIENT))
+
     var bullet_inst: BaseProjectile = gun_projectile.instantiate()
+    var bullet_start_pos = gun.barrel.global_position
+    # Randomize bullet start pos a bit
+    bullet_start_pos.x += randf_range( - screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
+    bullet_start_pos.y += randf_range( - screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
     if aim_ray.is_colliding():
-        bullet_inst.init(gun.barrel.global_position, aim_ray.get_collision_point())
+        bullet_inst.init(bullet_start_pos, aim_ray.get_collision_point())
         get_parent().add_child(bullet_inst)
         if aim_ray.get_collider().is_in_group("enemy"):
             # TODO: Damage enemy here
@@ -235,9 +248,9 @@ func perform_attack(gun: Gun, _is_secondary: bool=false, bounce_count=0, _is_pie
 
         # Do gun bounce thing
         if bounce_count > 0:
-            calculate_gun_bounce(aim_ray, gun.barrel.global_position, bounce_count, gun_projectile)
+            calculate_gun_bounce(aim_ray, bullet_start_pos, bounce_count, gun_projectile)
     else:
-        bullet_inst.init(gun.barrel.global_position, aim_ray_end.global_position)
+        bullet_inst.init(bullet_start_pos, aim_ray_end.global_position)
         get_parent().add_child(bullet_inst)
 
 func rotate_player(event):

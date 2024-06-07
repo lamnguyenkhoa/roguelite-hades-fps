@@ -10,7 +10,7 @@ class_name ShakeableCamera
 @export var noise: FastNoiseLite
 @export var noise_speed = 50.0
 
-const MAX_TRAUMA = 5.0
+const MAX_TRAUMA = 2.0
 const SHAKE_COEFFICIENT = 1.0
 
 var trauma = 0.0
@@ -30,11 +30,12 @@ func _process(delta):
 	camera.rotation_degrees.z = initial_rotation.z + max_z * get_shake_intensity(final_trauma) * get_noise_from_seed(2)
 
 func add_long_trauma(trauma_amount: float):
-	# This function is for calling every frame
+	# Trauma over long duration, such as during sliding, earthquake, house collapsing, ...
 	long_trauma = clamp(long_trauma + trauma_amount, 0.0, MAX_TRAUMA)
 
 func add_trauma(trauma_amount: float):
-	trauma = clamp(trauma + trauma_amount, 0.0, MAX_TRAUMA)
+	# Trauma over single tick, such as gunfire, small explosion, attacked, ...
+	trauma = clamp(trauma_amount, 0.0, MAX_TRAUMA) # Yes it replace existing trauma
 
 func get_shake_intensity(_trauma: float) -> float:
 	return _trauma * SHAKE_COEFFICIENT

@@ -12,11 +12,11 @@ class_name GunResource
 @export var projectile_speed: float
 ## Bullet is not a projectiles. Shot enemy instanly damaged. If this ticked, ignore projectile_speed
 @export var is_hitscan: bool
-@export var camera_shake_trauma: float = 0.2
 
 @export_group("Primary")
 @export var primary_bounce_time = 0
 @export var primary_pierce = false
+@export var primary_screenshake: float = 0
 
 @export_group("Secondary")
 @export var secondary_type: EnumAutoload.GunSecondaryAttackType
@@ -24,3 +24,4 @@ class_name GunResource
 @export var secondary_charge_time: float # Not every gun use this
 @export var secondary_bounce_time = 0
 @export var secondary_pierce = false
+@export var secondary_screenshake: float = 0
