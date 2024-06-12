@@ -264,12 +264,13 @@ func rotate_player(event):
 
 func camera_control(delta):
     # Tilt camera
-    if raw_input_dir.x < 0:
-        neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(3.0), delta * 5)
-    elif raw_input_dir.x > 0:
-        neck.rotation.z = lerp(neck.rotation.z, deg_to_rad( - 3.0), delta * 5)
-    else:
-        neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(0), delta * 5)
+    if GameManager.camera_tilt:
+        if raw_input_dir.x < 0:
+            neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(3.0), delta * 5)
+        elif raw_input_dir.x > 0:
+            neck.rotation.z = lerp(neck.rotation.z, deg_to_rad( - 3.0), delta * 5)
+        else:
+            neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(0), delta * 5)
 
     # Lower camera
     if is_sliding:

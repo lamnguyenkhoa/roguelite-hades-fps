@@ -7,6 +7,7 @@ class_name SettingUI
 @onready var mouse_sen_value: Label = $TabContainer/Control/VBoxContainer/MouseSens/Value
 @onready var fov_slider: HSlider = $TabContainer/Graphic/VBoxContainer/FOV/FOVSlider
 @onready var fov_value: Label = $TabContainer/Graphic/VBoxContainer/FOV/Value
+@onready var camera_tilt_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/CameraTilt/CameraTiltToggle
 
 var pause_ui: PauseUI
 
@@ -17,6 +18,7 @@ func _ready() -> void:
 	mouse_sen_value.text = "{0}".format([GameManager.mouse_sensitivity])
 	fov_slider.value = GameManager.camera_fov
 	fov_value.text = "{0}".format([GameManager.camera_fov])
+	camera_tilt_toggle.button_pressed = GameManager.camera_tilt
 
 func open_menu():
 	visible = true
@@ -44,3 +46,6 @@ func _on_mouse_sen_slider_value_changed(value: float) -> void:
 func _on_fov_slider_value_changed(value: float) -> void:
 	GameManager.camera_fov = value
 	fov_value.text = "{0}".format([value])
+
+func _on_camera_tilt_toggle_toggled(toggled_on: bool) -> void:
+	GameManager.camera_tilt = toggled_on

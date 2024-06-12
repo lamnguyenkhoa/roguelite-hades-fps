@@ -54,9 +54,11 @@ offset_bottom = 256.0
 grow_horizontal = 2
 grow_vertical = 2
 tab_alignment = 1
+current_tab = 1
 tabs_visible = false
 
 [node name="Control" type="Control" parent="TabContainer"]
+visible = false
 layout_mode = 2
 
 [node name="Title" type="Label" parent="TabContainer/Control"]
@@ -116,7 +118,6 @@ text = "100"
 horizontal_alignment = 1
 
 [node name="Graphic" type="Control" parent="TabContainer"]
-visible = false
 layout_mode = 2
 
 [node name="Title" type="Label" parent="TabContainer/Graphic"]
@@ -174,6 +175,25 @@ grow_vertical = 2
 text = "100"
 horizontal_alignment = 1
 
+[node name="CameraTilt" type="Control" parent="TabContainer/Graphic/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Graphic/VBoxContainer/CameraTilt"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Camera tilt"
+
+[node name="CameraTiltToggle" type="CheckButton" parent="TabContainer/Graphic/VBoxContainer/CameraTilt"]
+layout_mode = 0
+offset_left = 288.0
+offset_top = 6.0
+offset_right = 332.0
+offset_bottom = 30.0
+text = "Toggle"
+
 [node name="Audio" type="Control" parent="TabContainer"]
 visible = false
 layout_mode = 2
@@ -204,4 +224,5 @@ text = "<< Back"
 [connection signal="pressed" from="VBoxContainer/AudioOption" to="." method="_on_audio_option_pressed"]
 [connection signal="value_changed" from="TabContainer/Control/VBoxContainer/MouseSens/MouseSenSlider" to="." method="_on_mouse_sen_slider_value_changed"]
 [connection signal="value_changed" from="TabContainer/Graphic/VBoxContainer/FOV/FOVSlider" to="." method="_on_fov_slider_value_changed"]
+[connection signal="toggled" from="TabContainer/Graphic/VBoxContainer/CameraTilt/CameraTiltToggle" to="." method="_on_camera_tilt_toggle_toggled"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

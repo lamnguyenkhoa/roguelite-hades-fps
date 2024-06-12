@@ -10,3 +10,4 @@ var camera_fov: float = 90: # From 60 to 120
         if value != camera_fov:
             player.player_camera.set_fov(value)
         camera_fov = value
+var camera_tilt = true
