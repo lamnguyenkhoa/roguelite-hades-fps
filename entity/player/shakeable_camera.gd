@@ -43,3 +43,6 @@ func get_shake_intensity(_trauma: float) -> float:
 func get_noise_from_seed(_seed: int) -> float:
 	noise.seed = _seed
 	return noise.get_noise_1d(time * noise_speed)
+
+func set_fov(value: float):
+	camera.fov = value

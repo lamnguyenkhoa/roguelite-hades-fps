@@ -67,6 +67,8 @@ var current_gun_slot = 0
 var is_swapping_gun = false
 
 func _ready():
+    GameManager.player = self
+    player_camera.set_fov(GameManager.camera_fov)
     Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
     gun_container_original_pos = gun_container.position
     last_dashed_timestamp = Time.get_ticks_msec() - dash_cd * 1000
