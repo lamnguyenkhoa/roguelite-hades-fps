@@ -12,3 +12,4 @@ var camera_fov: float = 90: # From 60 to 120
         camera_fov = value
 var camera_tilt = true
 var fps_limit_index = 2 # From 0 to 5. Refer to EnumAutoload.FPS_LIMIT_ARRAY
+var vsync_option_index = 1

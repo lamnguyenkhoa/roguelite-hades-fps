@@ -9,6 +9,7 @@ class_name SettingUI
 @onready var fov_value: Label = $TabContainer/Graphic/VBoxContainer/FOV/Value
 @onready var camera_tilt_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/CameraTilt/CameraTiltToggle
 @onready var fps_limit_option_button: OptionButton = $TabContainer/Graphic/VBoxContainer/FPSLimit/FPSLimitOptionButton
+@onready var vsync_option_button: OptionButton = $TabContainer/Graphic/VBoxContainer/Vsync/VsyncOptionButton
 
 var pause_ui: PauseUI
 
@@ -22,6 +23,8 @@ func _ready() -> void:
 	camera_tilt_toggle.button_pressed = GameManager.camera_tilt
 	Engine.max_fps = EnumAutoload.FPS_LIMIT_ARRAY[GameManager.fps_limit_index]
 	fps_limit_option_button.selected = GameManager.fps_limit_index
+	DisplayServer.window_set_vsync_mode(GameManager.vsync_option_index)
+	vsync_option_button.selected = GameManager.vsync_option_index
 
 func open_menu():
 	visible = true
@@ -56,3 +59,7 @@ func _on_camera_tilt_toggle_toggled(toggled_on: bool) -> void:
 func _on_fps_limit_option_button_item_selected(index: int) -> void:
 	Engine.max_fps = EnumAutoload.FPS_LIMIT_ARRAY[index]
 	GameManager.fps_limit_index = index
+
+func _on_vsync_option_button_item_selected(index: int) -> void:
+	DisplayServer.window_set_vsync_mode(index)
+	GameManager.vsync_option_index = index
