@@ -168,7 +168,10 @@ func show_debug_label():
     var h_speed = snapped(Vector3(velocity.x, 0, velocity.z).length(), 0.1)
     var v_speed = snapped(vel_vertical, 0.1)
     var snapped_height = snapped(global_position.y, 0.1)
-    debug_label.text = "HSpeed: {0} u/s\nVSpeed: {1} u/s".format([h_speed, v_speed])
+    Engine.get_frames_per_second()
+    debug_label.text = ""
+    debug_label.text += "FPS: {0}".format([Engine.get_frames_per_second()])
+    debug_label.text += "\nHSpeed: {0} u/s\nVSpeed: {1} u/s".format([h_speed, v_speed])
     debug_label.text += "\nHeight from ground: {0}".format([snapped_height - 1.5])
     debug_label.text += "\nOn ground: {0} | wall-cling: {1}".format([is_on_floor(), moving_toward_wall()])
     debug_label.text += "\nIs dashing: {0} | Is sliding: {1}".format([is_dashing, is_sliding])

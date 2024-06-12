@@ -8,6 +8,7 @@ class_name SettingUI
 @onready var fov_slider: HSlider = $TabContainer/Graphic/VBoxContainer/FOV/FOVSlider
 @onready var fov_value: Label = $TabContainer/Graphic/VBoxContainer/FOV/Value
 @onready var camera_tilt_toggle: CheckButton = $TabContainer/Graphic/VBoxContainer/CameraTilt/CameraTiltToggle
+@onready var fps_limit_option_button: OptionButton = $TabContainer/Graphic/VBoxContainer/FPSLimit/FPSLimitOptionButton
 
 var pause_ui: PauseUI
 
@@ -19,6 +20,8 @@ func _ready() -> void:
 	fov_slider.value = GameManager.camera_fov
 	fov_value.text = "{0}".format([GameManager.camera_fov])
 	camera_tilt_toggle.button_pressed = GameManager.camera_tilt
+	Engine.max_fps = EnumAutoload.FPS_LIMIT_ARRAY[GameManager.fps_limit_index]
+	fps_limit_option_button.selected = GameManager.fps_limit_index
 
 func open_menu():
 	visible = true
@@ -49,3 +52,7 @@ func _on_fov_slider_value_changed(value: float) -> void:
 
 func _on_camera_tilt_toggle_toggled(toggled_on: bool) -> void:
 	GameManager.camera_tilt = toggled_on
+
+func _on_fps_limit_option_button_item_selected(index: int) -> void:
+	Engine.max_fps = EnumAutoload.FPS_LIMIT_ARRAY[index]
+	GameManager.fps_limit_index = index

@@ -7,3 +7,5 @@ enum GunSecondaryAttackType {
     HOLD, # ex: Use a shield / shooting lots of bullets
     HOLD_AND_RELEASE # ex: Charge a powerful beam and shoot
 }
+
+var FPS_LIMIT_ARRAY = [30, 60, 120, 144, 240, 0]
