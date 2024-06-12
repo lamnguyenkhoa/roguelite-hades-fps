@@ -263,7 +263,7 @@ func rotate_player(event):
     player_camera.rotate_x( - event.relative.y * (GameManager.mouse_sensitivity / 10000))
     player_camera.rotation.y = 0
     player_camera.rotation.z = 0
-    player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad( - 80), deg_to_rad(80))
+    player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad( - 89), deg_to_rad(89))
 
 func camera_control(delta):
     # Tilt camera
