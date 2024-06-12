@@ -5,8 +5,8 @@ class_name SettingUI
 
 @onready var mouse_sen_slider: HSlider = $TabContainer/Control/VBoxContainer/MouseSens/MouseSenSlider
 @onready var mouse_sen_value: Label = $TabContainer/Control/VBoxContainer/MouseSens/Value
-@onready var fov_slider: HSlider = $TabContainer/Control/VBoxContainer/FOV/FOVSlider
-@onready var fov_value: Label = $TabContainer/Control/VBoxContainer/FOV/Value
+@onready var fov_slider: HSlider = $TabContainer/Graphic/VBoxContainer/FOV/FOVSlider
+@onready var fov_value: Label = $TabContainer/Graphic/VBoxContainer/FOV/Value
 
 var pause_ui: PauseUI
 
@@ -27,10 +27,10 @@ func close_menu():
 func _on_control_option_pressed() -> void:
 	tab_container.current_tab = 0
 
-func _on_audio_option_pressed() -> void:
-	tab_container.current_tab = 1
-
 func _on_graphic_option_pressed() -> void:
+	tab_container.current_tab = 1
+	
+func _on_audio_option_pressed() -> void:
 	tab_container.current_tab = 2
 
 func _on_back_button_pressed() -> void:

@@ -108,45 +108,8 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 offset_left = -80.0
-offset_top = -11.5
-offset_bottom = 11.5
-grow_horizontal = 0
-grow_vertical = 2
-text = "100"
-horizontal_alignment = 1
-
-[node name="FOV" type="Control" parent="TabContainer/Control/VBoxContainer"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-
-[node name="Label" type="Label" parent="TabContainer/Control/VBoxContainer/FOV"]
-layout_mode = 0
-offset_top = -2.0
-offset_right = 59.0
-offset_bottom = 40.0
-theme_override_font_sizes/font_size = 26
-text = "FOV"
-
-[node name="FOVSlider" type="HSlider" parent="TabContainer/Control/VBoxContainer/FOV"]
-layout_mode = 0
-offset_left = 296.0
-offset_top = 14.0
-offset_right = 672.0
-offset_bottom = 30.0
-min_value = 60.0
-max_value = 120.0
-value = 90.0
-
-[node name="Value" type="Label" parent="TabContainer/Control/VBoxContainer/FOV"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -80.0
-offset_top = -11.5
-offset_bottom = 11.5
+offset_top = -12.0
+offset_bottom = 11.0
 grow_horizontal = 0
 grow_vertical = 2
 text = "100"
@@ -167,6 +130,49 @@ offset_bottom = 55.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 40
 text = "Graphic"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Graphic"]
+offset_left = 32.0
+offset_top = 80.0
+offset_right = 800.0
+offset_bottom = 472.0
+theme_override_constants/separation = 10
+
+[node name="FOV" type="Control" parent="TabContainer/Graphic/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Graphic/VBoxContainer/FOV"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "FOV"
+
+[node name="FOVSlider" type="HSlider" parent="TabContainer/Graphic/VBoxContainer/FOV"]
+layout_mode = 0
+offset_left = 296.0
+offset_top = 16.0
+offset_right = 672.0
+offset_bottom = 32.0
+min_value = 60.0
+max_value = 120.0
+value = 60.0
+
+[node name="Value" type="Label" parent="TabContainer/Graphic/VBoxContainer/FOV"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -12.0
+offset_bottom = 11.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "100"
+horizontal_alignment = 1
 
 [node name="Audio" type="Control" parent="TabContainer"]
 visible = false
@@ -197,5 +203,5 @@ text = "<< Back"
 [connection signal="pressed" from="VBoxContainer/GraphicOption" to="." method="_on_graphic_option_pressed"]
 [connection signal="pressed" from="VBoxContainer/AudioOption" to="." method="_on_audio_option_pressed"]
 [connection signal="value_changed" from="TabContainer/Control/VBoxContainer/MouseSens/MouseSenSlider" to="." method="_on_mouse_sen_slider_value_changed"]
-[connection signal="value_changed" from="TabContainer/Control/VBoxContainer/FOV/FOVSlider" to="." method="_on_fov_slider_value_changed"]
+[connection signal="value_changed" from="TabContainer/Graphic/VBoxContainer/FOV/FOVSlider" to="." method="_on_fov_slider_value_changed"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
