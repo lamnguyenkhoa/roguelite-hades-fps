@@ -5,7 +5,7 @@
 [ext_resource type="Material" uid="uid://ckee7r277nvyg" path="res://material/grid_mat2.tres" id="3_mqr0u"]
 [ext_resource type="Environment" uid="uid://bnsi5blt3qbue" path="res://level/world_environment.tres" id="4_tl54g"]
 [ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="5_cqfjv"]
-[ext_resource type="AudioStream" uid="uid://t7eg4nqobbxa" path="res://asset/sfx/bgm/firefight (loop).mp3" id="6_dtff8"]
+[ext_resource type="AudioStream" uid="uid://7c5wkufm1y7w" path="res://asset/bgm/ambience_d21_loop.ogg" id="6_iohbr"]
 
 [node name="TestLevel" type="Node3D"]
 
@@ -117,12 +117,13 @@ offset_left = -376.0
 offset_bottom = 256.0
 grow_horizontal = 0
 grow_vertical = 1
+initial_node_to_watch = NodePath("../../Player")
 
 [node name="Player" parent="." instance=ExtResource("1_i0lhh")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 1.91076, -6.26333)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 process_mode = 3
-stream = ExtResource("6_dtff8")
+stream = ExtResource("6_iohbr")
 autoplay = true
 bus = &"BGM"
