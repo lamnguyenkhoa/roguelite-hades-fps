@@ -7,8 +7,8 @@ var sound_effects: SoundEffectsPlayer = SoundEffectsPlayer.new(["SFX", "Sounds"]
 var ui_sound_effects: SoundEffectsPlayer = SoundEffectsPlayer.new(["UI", "Interface"], 8)
 var music: MusicPlayer = MusicPlayer.new(["Music", "BGM"], 2)
 
-var button_hover_sfx = preload ("res://asset/sfx/ui/gui_hover.mp3")
-var button_click_sfx = preload ("res://asset/sfx/ui/gui_click.mp3")
+var button_hover_sfx = preload ("res://asset/sfx/ui/gui_hover.ogg")
+var button_click_sfx = preload ("res://asset/sfx/ui/gui_click.ogg")
 
 var sound_process_mode: ProcessMode:
 	set(value):

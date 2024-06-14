@@ -54,7 +54,7 @@ offset_bottom = 256.0
 grow_horizontal = 2
 grow_vertical = 2
 tab_alignment = 1
-current_tab = 2
+current_tab = 1
 tabs_visible = false
 
 [node name="Control" type="Control" parent="TabContainer"]
@@ -118,7 +118,6 @@ text = "100"
 horizontal_alignment = 1
 
 [node name="Graphic" type="Control" parent="TabContainer"]
-visible = false
 layout_mode = 2
 
 [node name="Title" type="Label" parent="TabContainer/Graphic"]
@@ -259,6 +258,7 @@ popup/item_2/text = "Adaptive"
 popup/item_2/id = 2
 
 [node name="Audio" type="Control" parent="TabContainer"]
+visible = false
 layout_mode = 2
 
 [node name="Title" type="Label" parent="TabContainer/Audio"]
@@ -422,16 +422,31 @@ offset_bottom = 154.0
 theme_override_font_sizes/font_size = 30
 text = "<< Back"
 
+[connection signal="mouse_entered" from="VBoxContainer/ControlOption" to="." method="_on_control_option_mouse_entered"]
 [connection signal="pressed" from="VBoxContainer/ControlOption" to="." method="_on_control_option_pressed"]
+[connection signal="mouse_entered" from="VBoxContainer/GraphicOption" to="." method="_on_graphic_option_mouse_entered"]
 [connection signal="pressed" from="VBoxContainer/GraphicOption" to="." method="_on_graphic_option_pressed"]
+[connection signal="mouse_entered" from="VBoxContainer/AudioOption" to="." method="_on_audio_option_mouse_entered"]
 [connection signal="pressed" from="VBoxContainer/AudioOption" to="." method="_on_audio_option_pressed"]
+[connection signal="mouse_entered" from="TabContainer/Control/VBoxContainer/MouseSens/MouseSenSlider" to="." method="_on_mouse_sen_slider_mouse_entered"]
 [connection signal="value_changed" from="TabContainer/Control/VBoxContainer/MouseSens/MouseSenSlider" to="." method="_on_mouse_sen_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/FOV/FOVSlider" to="." method="_on_fov_slider_mouse_entered"]
 [connection signal="value_changed" from="TabContainer/Graphic/VBoxContainer/FOV/FOVSlider" to="." method="_on_fov_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/CameraTilt/CameraTiltToggle" to="." method="_on_camera_tilt_toggle_mouse_entered"]
 [connection signal="toggled" from="TabContainer/Graphic/VBoxContainer/CameraTilt/CameraTiltToggle" to="." method="_on_camera_tilt_toggle_toggled"]
+[connection signal="item_focused" from="TabContainer/Graphic/VBoxContainer/FPSLimit/FPSLimitOptionButton" to="." method="_on_fps_limit_option_button_item_focused"]
 [connection signal="item_selected" from="TabContainer/Graphic/VBoxContainer/FPSLimit/FPSLimitOptionButton" to="." method="_on_fps_limit_option_button_item_selected"]
+[connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/FPSLimit/FPSLimitOptionButton" to="." method="_on_fps_limit_option_button_mouse_entered"]
+[connection signal="item_focused" from="TabContainer/Graphic/VBoxContainer/Vsync/VsyncOptionButton" to="." method="_on_vsync_option_button_item_focused"]
 [connection signal="item_selected" from="TabContainer/Graphic/VBoxContainer/Vsync/VsyncOptionButton" to="." method="_on_vsync_option_button_item_selected"]
+[connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/Vsync/VsyncOptionButton" to="." method="_on_vsync_option_button_mouse_entered"]
+[connection signal="mouse_entered" from="TabContainer/Audio/VBoxContainer/Master/MasterSlider" to="." method="_on_master_slider_mouse_entered"]
 [connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/Master/MasterSlider" to="." method="_on_master_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/Audio/VBoxContainer/BGM/BGMSlider" to="." method="_on_bgm_slider_mouse_entered"]
 [connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/BGM/BGMSlider" to="." method="_on_bgm_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/Audio/VBoxContainer/SFX/SFXSlider" to="." method="_on_sfx_slider_mouse_entered"]
 [connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/SFX/SFXSlider" to="." method="_on_sfx_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/Audio/VBoxContainer/UI/UISlider" to="." method="_on_ui_slider_mouse_entered"]
 [connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/UI/UISlider" to="." method="_on_ui_slider_value_changed"]
+[connection signal="mouse_entered" from="BackButton" to="." method="_on_back_button_mouse_entered"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
