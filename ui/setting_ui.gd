@@ -11,6 +11,15 @@ class_name SettingUI
 @onready var fps_limit_option_button: OptionButton = $TabContainer/Graphic/VBoxContainer/FPSLimit/FPSLimitOptionButton
 @onready var vsync_option_button: OptionButton = $TabContainer/Graphic/VBoxContainer/Vsync/VsyncOptionButton
 
+@onready var master_slider: HSlider = $TabContainer/Audio/VBoxContainer/Master/MasterSlider
+@onready var master_value: Label = $TabContainer/Audio/VBoxContainer/Master/Value
+@onready var bgm_slider: HSlider = $TabContainer/Audio/VBoxContainer/BGM/BGMSlider
+@onready var bgm_value: Label = $TabContainer/Audio/VBoxContainer/BGM/Value
+@onready var sfx_slider: HSlider = $TabContainer/Audio/VBoxContainer/SFX/SFXSlider
+@onready var sfx_value: Label = $TabContainer/Audio/VBoxContainer/SFX/Value
+@onready var ui_slider: HSlider = $TabContainer/Audio/VBoxContainer/UI/UISlider
+@onready var ui_value: Label = $TabContainer/Audio/VBoxContainer/UI/Value
+
 var pause_ui: PauseUI
 
 func _ready() -> void:
@@ -25,6 +34,18 @@ func _ready() -> void:
 	fps_limit_option_button.selected = GameManager.fps_limit_index
 	DisplayServer.window_set_vsync_mode(GameManager.vsync_option_index)
 	vsync_option_button.selected = GameManager.vsync_option_index
+	SoundManager.set_master_volume(GameManager.master_audio / 100.0)
+	SoundManager.set_music_volume(GameManager.bgm_audio / 100.0)
+	SoundManager.set_sound_volume(GameManager.sfx_audio / 100.0)
+	SoundManager.set_ui_sound_volume(GameManager.ui_audio / 100.0)
+	master_slider.value = GameManager.master_audio
+	master_value.text = "{0}".format([GameManager.master_audio])
+	bgm_slider.value = GameManager.bgm_audio
+	bgm_value.text = "{0}".format([GameManager.bgm_audio])
+	sfx_slider.value = GameManager.sfx_audio
+	sfx_value.text = "{0}".format([GameManager.sfx_audio])
+	ui_slider.value = GameManager.ui_audio
+	ui_value.text = "{0}".format([GameManager.ui_audio])
 
 func open_menu():
 	visible = true
@@ -63,3 +84,23 @@ func _on_fps_limit_option_button_item_selected(index: int) -> void:
 func _on_vsync_option_button_item_selected(index: int) -> void:
 	DisplayServer.window_set_vsync_mode(index)
 	GameManager.vsync_option_index = index
+
+func _on_master_slider_value_changed(value: float) -> void:
+	SoundManager.set_master_volume(value / 100.0)
+	master_value.text = "{0}".format([value])
+	GameManager.master_audio = value
+
+func _on_ui_slider_value_changed(value: float) -> void:
+	SoundManager.set_ui_sound_volume(value / 100.0)
+	ui_value.text = "{0}".format([value])
+	GameManager.ui_audio = value
+
+func _on_sfx_slider_value_changed(value: float) -> void:
+	SoundManager.set_sound_volume(value / 100.0)
+	sfx_value.text = "{0}".format([value])
+	GameManager.sfx_audio = value
+
+func _on_bgm_slider_value_changed(value: float) -> void:
+	SoundManager.set_music_volume(value / 100.0)
+	bgm_value.text = "{0}".format([value])
+	GameManager.bgm_audio = value

@@ -54,7 +54,7 @@ offset_bottom = 256.0
 grow_horizontal = 2
 grow_vertical = 2
 tab_alignment = 1
-current_tab = 1
+current_tab = 2
 tabs_visible = false
 
 [node name="Control" type="Control" parent="TabContainer"]
@@ -118,6 +118,7 @@ text = "100"
 horizontal_alignment = 1
 
 [node name="Graphic" type="Control" parent="TabContainer"]
+visible = false
 layout_mode = 2
 
 [node name="Title" type="Label" parent="TabContainer/Graphic"]
@@ -258,7 +259,6 @@ popup/item_2/text = "Adaptive"
 popup/item_2/id = 2
 
 [node name="Audio" type="Control" parent="TabContainer"]
-visible = false
 layout_mode = 2
 
 [node name="Title" type="Label" parent="TabContainer/Audio"]
@@ -272,6 +272,146 @@ offset_bottom = 55.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 40
 text = "Audio"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Audio"]
+offset_left = 32.0
+offset_top = 80.0
+offset_right = 800.0
+offset_bottom = 472.0
+theme_override_constants/separation = 10
+
+[node name="Master" type="Control" parent="TabContainer/Audio/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Audio/VBoxContainer/Master"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "Master
+"
+
+[node name="MasterSlider" type="HSlider" parent="TabContainer/Audio/VBoxContainer/Master"]
+layout_mode = 0
+offset_left = 296.0
+offset_top = 16.0
+offset_right = 672.0
+offset_bottom = 32.0
+
+[node name="Value" type="Label" parent="TabContainer/Audio/VBoxContainer/Master"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -12.0
+offset_bottom = 11.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "100"
+horizontal_alignment = 1
+
+[node name="BGM" type="Control" parent="TabContainer/Audio/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Audio/VBoxContainer/BGM"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "BGM"
+
+[node name="BGMSlider" type="HSlider" parent="TabContainer/Audio/VBoxContainer/BGM"]
+layout_mode = 0
+offset_left = 296.0
+offset_top = 16.0
+offset_right = 672.0
+offset_bottom = 32.0
+
+[node name="Value" type="Label" parent="TabContainer/Audio/VBoxContainer/BGM"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -12.0
+offset_bottom = 11.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "100"
+horizontal_alignment = 1
+
+[node name="SFX" type="Control" parent="TabContainer/Audio/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Audio/VBoxContainer/SFX"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "SFX"
+
+[node name="SFXSlider" type="HSlider" parent="TabContainer/Audio/VBoxContainer/SFX"]
+layout_mode = 0
+offset_left = 296.0
+offset_top = 16.0
+offset_right = 672.0
+offset_bottom = 32.0
+
+[node name="Value" type="Label" parent="TabContainer/Audio/VBoxContainer/SFX"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -12.0
+offset_bottom = 11.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "100"
+horizontal_alignment = 1
+
+[node name="UI" type="Control" parent="TabContainer/Audio/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContainer/Audio/VBoxContainer/UI"]
+layout_mode = 0
+offset_right = 59.0
+offset_bottom = 42.0
+theme_override_font_sizes/font_size = 26
+text = "UI"
+
+[node name="UISlider" type="HSlider" parent="TabContainer/Audio/VBoxContainer/UI"]
+layout_mode = 0
+offset_left = 296.0
+offset_top = 16.0
+offset_right = 672.0
+offset_bottom = 32.0
+
+[node name="Value" type="Label" parent="TabContainer/Audio/VBoxContainer/UI"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -12.0
+offset_bottom = 11.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "100"
+horizontal_alignment = 1
 
 [node name="BackButton" type="Button" parent="."]
 layout_mode = 2
@@ -290,4 +430,8 @@ text = "<< Back"
 [connection signal="toggled" from="TabContainer/Graphic/VBoxContainer/CameraTilt/CameraTiltToggle" to="." method="_on_camera_tilt_toggle_toggled"]
 [connection signal="item_selected" from="TabContainer/Graphic/VBoxContainer/FPSLimit/FPSLimitOptionButton" to="." method="_on_fps_limit_option_button_item_selected"]
 [connection signal="item_selected" from="TabContainer/Graphic/VBoxContainer/Vsync/VsyncOptionButton" to="." method="_on_vsync_option_button_item_selected"]
+[connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/Master/MasterSlider" to="." method="_on_master_slider_value_changed"]
+[connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/BGM/BGMSlider" to="." method="_on_bgm_slider_value_changed"]
+[connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/SFX/SFXSlider" to="." method="_on_sfx_slider_value_changed"]
+[connection signal="value_changed" from="TabContainer/Audio/VBoxContainer/UI/UISlider" to="." method="_on_ui_slider_value_changed"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
