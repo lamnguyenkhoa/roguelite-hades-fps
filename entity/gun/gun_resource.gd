@@ -14,12 +14,14 @@ class_name GunResource
 @export var is_hitscan: bool
 
 @export_group("Primary")
+@export var primary_sfx: AudioStream
 @export var primary_bounce_time = 0
 @export var primary_pierce = false
 @export var primary_screenshake: float = 0
 
 @export_group("Secondary")
 @export var secondary_type: EnumAutoload.GunSecondaryAttackType
+@export var secondary_sfx: AudioStream
 @export var secondary_cooldown: float = 0.5
 @export var secondary_charge_time: float # Not every gun use this
 @export var secondary_bounce_time = 0

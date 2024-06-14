@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=16 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://entity/player/player.gd" id="1_rl0vi"]
 [ext_resource type="Texture2D" uid="uid://ctkoyf8rtxhqs" path="res://asset/ui/crosshair.png" id="2_tyg2i"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="7_1276k"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="8_dkhcu"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="10_g5bf6"]
+[ext_resource type="PackedScene" uid="uid://b3vol18g8n2bt" path="res://entity/common/CharacterAudioPlayer3D.tscn" id="13_7vo7v"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_f0s2u"]
 
@@ -73,9 +74,6 @@ transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.051, -0.1, -0.185)
 visible = false
 
 [node name="AimRay" parent="Neck/ShakeableCamera" instance=ExtResource("5_dqbuo")]
-
-[node name="PlayerAudio" type="AudioStreamPlayer3D" parent="."]
-volume_db = -24.0
 
 [node name="DashDuration" type="Timer" parent="."]
 editor_description = "How long the dash action last"
@@ -139,6 +137,8 @@ script = ExtResource("8_dkhcu")
 script = ExtResource("10_g5bf6")
 to = NodePath("../../Airborne")
 event = &"stop_wallcling"
+
+[node name="CharacterAudioPlayer3D" parent="." instance=ExtResource("13_7vo7v")]
 
 [connection signal="timeout" from="DashDuration" to="." method="_on_dash_duration_timeout"]
 [connection signal="timeout" from="CoyoteTimer" to="." method="_on_coyote_timer_timeout"]

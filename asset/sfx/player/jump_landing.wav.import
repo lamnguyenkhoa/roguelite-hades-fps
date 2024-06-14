@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://cl3enrb3sh1nu"
-path="res://.godot/imported/jump_landing.wav-176268bce59676b5678a9b6f8cbb645a.sample"
+path="res://.godot/imported/jump_landing.wav-45a3683fe1172dacfd1578c6399e6946.sample"
 
 [deps]
 
-source_file="res://asset/sfx/jump_landing.wav"
-dest_files=["res://.godot/imported/jump_landing.wav-176268bce59676b5678a9b6f8cbb645a.sample"]
+source_file="res://asset/sfx/player/jump_landing.wav"
+dest_files=["res://.godot/imported/jump_landing.wav-45a3683fe1172dacfd1578c6399e6946.sample"]
 
 [params]
 

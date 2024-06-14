@@ -4,23 +4,23 @@ class_name Player
 @export var can_wall_jump: bool
 @export var can_wall_cling: bool
 @export var max_air_jump = 2
-@export var dash_cd = 0.5
+@export var dash_cd: float = 0.5
 @export var bounce_ray_prefab: PackedScene
 
 @onready var player_camera: ShakeableCamera = $Neck/ShakeableCamera
-@onready var audio_player: AudioStreamPlayer3D = $PlayerAudio
 @onready var debug_label: Label = $Neck/ShakeableCamera/DebugLabel
 @onready var dash_duration_timer: Timer = $DashDuration
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var neck: Node3D = $Neck
 @onready var state_chart: StateChart = $StateChart
 @onready var wall_raycast: RayCast3D = $WallRaycast
+@onready var audio_player: CharacterAudioPlayer3D = $CharacterAudioPlayer3D
 
 @onready var gun_container = $Neck/ShakeableCamera/GunContainer
 @onready var aim_ray: RayCast3D = $Neck/ShakeableCamera/AimRay
 @onready var aim_ray_end: Marker3D = $Neck/ShakeableCamera/AimRay/AimRayEnd
 
-var landing_sfx = preload ("res://asset/sfx/jump_landing.wav")
+var landing_sfx = preload ("res://asset/sfx/player/jump_landing.wav")
 
 const MAX_SPEED = 8.0
 const MAX_FALL_SPEED = 50.0
@@ -71,7 +71,7 @@ func _ready():
     player_camera.set_fov(GameManager.camera_fov)
     Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
     gun_container_original_pos = gun_container.position
-    last_dashed_timestamp = Time.get_ticks_msec() - dash_cd * 1000
+    last_dashed_timestamp = 0
     current_gun_slot = 0
     for child in gun_container.get_children():
         child.visible = false
@@ -160,9 +160,7 @@ func _physics_process(delta):
     camera_control(delta)
 
 func play_sfx(sfx: AudioStream):
-    audio_player.stream = sfx
-    audio_player.pitch_scale = randf_range(0.8, 1.2)
-    audio_player.play()
+    audio_player.play(sfx, "SFX", true)
 
 func show_debug_label():
     var h_speed = snapped(Vector3(velocity.x, 0, velocity.z).length(), 0.1)
@@ -230,15 +228,18 @@ func check_secondary_attack():
 func perform_attack(gun: Gun, is_secondary: bool=false, bounce_count=0, _is_pierce=false):
     var gun_projectile: PackedScene = gun.primary_projectile
     var screenshake_amount = gun.data.primary_screenshake
+    var gun_sfx = gun.data.primary_sfx
     if is_secondary:
         gun_projectile = gun.secondary_projetile
         screenshake_amount = gun.data.secondary_screenshake
+        gun_sfx = gun.data.secondary_sfx
     # Screenshake
     player_camera.add_trauma(screenshake_amount)
     # Recoil
     player_camera.rotate_x(screenshake_amount / RECOIL_COEFFICIENT)
     player_camera.rotate_y(randf_range( - screenshake_amount / RECOIL_COEFFICIENT, screenshake_amount / RECOIL_COEFFICIENT))
 
+    play_sfx(gun_sfx)
     var bullet_inst: BaseProjectile = gun_projectile.instantiate()
     var bullet_start_pos = gun.barrel.global_position
     # Randomize bullet start pos a bit

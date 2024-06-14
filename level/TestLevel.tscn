@@ -11,9 +11,6 @@
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("4_tl54g")
 
-[node name="Player" parent="." instance=ExtResource("1_i0lhh")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.66013, -8.1608)
-
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, 0, 6.98508, 0)
 layers = 3
@@ -119,4 +116,6 @@ offset_left = -376.0
 offset_bottom = 256.0
 grow_horizontal = 0
 grow_vertical = 1
-initial_node_to_watch = NodePath("../../Player")
+
+[node name="Player" parent="." instance=ExtResource("1_i0lhh")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 1.91076, -6.26333)
