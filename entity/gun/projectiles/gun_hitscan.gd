@@ -4,6 +4,8 @@ class_name GunHitscan
 @export var thickness = 4
 @export var spark_effect: PackedScene
 
+@onready var shot_flash_start = $ShotFlashStart
+
 var alpha = 1.0
 
 const FADE_SPEED = 4
@@ -11,6 +13,10 @@ const FADE_SPEED = 4
 func _ready():
 	var dup_mat = material_override.duplicate()
 	material_override = dup_mat
+	if shot_flash_start:
+		var rotate_amount = randi_range(0, 90)
+		shot_flash_start.rotate_z(rotate_amount)
+		shot_flash_start.modulate = material_override.albedo_color
 
 func init(pos1: Vector3, pos2: Vector3):
 	self.scale = Vector3(0.01 * thickness, 0.01 * thickness, pos1.distance_to(pos2))
@@ -20,6 +26,8 @@ func _process(delta):
 	alpha -= delta * FADE_SPEED
 	alpha = clamp(alpha, 0, 1)
 	material_override.albedo_color.a = alpha
+	if shot_flash_start:
+		shot_flash_start.modulate.a = clamp(alpha, 0, 1)
 
 func create_spark(pos: Vector3, normal: Vector3):
 	var spark_inst = spark_effect.instantiate()

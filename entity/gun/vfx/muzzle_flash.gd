@@ -10,6 +10,8 @@ func _ready() -> void:
 func flash():
     light.visible = true
     play("default")
+    var rotate_amount = randi_range(5, 45)
+    rotate_z(rotate_amount)
     timer.start()
 
 func _on_muzzle_flash_timer_timeout() -> void:
