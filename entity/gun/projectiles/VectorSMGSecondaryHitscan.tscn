@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bascf4vtdaok6"]
+[gd_scene load_steps=5 format=3 uid="uid://bascf4vtdaok6"]
 
 [ext_resource type="Script" path="res://entity/gun/projectiles/gun_hitscan.gd" id="1_wso3q"]
+[ext_resource type="PackedScene" uid="uid://q20db1yg4vdk" path="res://entity/gun/spark_fx/BulletSpark.tscn" id="2_fix35"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5a8p6"]
 transparency = 1
@@ -16,6 +17,7 @@ material_override = SubResource("StandardMaterial3D_5a8p6")
 mesh = SubResource("BoxMesh_yehfg")
 script = ExtResource("1_wso3q")
 thickness = 10
+spark_effect = ExtResource("2_fix35")
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true

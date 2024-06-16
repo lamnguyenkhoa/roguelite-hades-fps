@@ -2,6 +2,7 @@ extends BaseProjectile
 class_name GunHitscan
 
 @export var thickness = 4
+@export var spark_effect: PackedScene
 
 var alpha = 1.0
 
@@ -19,6 +20,13 @@ func _process(delta):
 	alpha -= delta * FADE_SPEED
 	alpha = clamp(alpha, 0, 1)
 	material_override.albedo_color.a = alpha
+
+func create_spark(pos: Vector3, normal: Vector3):
+	var relative_normal = pos + normal
+	var spark_inst = spark_effect.instantiate()
+	get_parent().add_child(spark_inst)
+	spark_inst.global_position = pos
+	spark_inst.look_at(relative_normal, Vector3.UP)
 
 # func trigger_particles(pos, gun_pos, on_enemy):
 # 	if on_enemy:

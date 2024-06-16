@@ -251,7 +251,10 @@ func perform_attack(gun: Gun, is_secondary: bool=false, bounce_count=0, _is_pier
         if aim_ray.get_collider().is_in_group("enemy"):
             # TODO: Damage enemy here
             return
-
+        else:
+            # Hit wall/obstacle
+            var collision_normal = aim_ray.get_collision_normal()
+            bullet_inst.create_spark(aim_ray.get_collision_point(), collision_normal)
         # Do gun bounce thing
         if bounce_count > 0:
             calculate_gun_bounce(aim_ray, bullet_start_pos, bounce_count, gun_projectile)
@@ -356,7 +359,7 @@ func calculate_gun_bounce(_aim_ray: RayCast3D, gun_barrel_pos: Vector3, bounce_c
 
     for i in range(bounce_count):
         var collision_normal = bounce_ray.get_collision_normal()
-        var bounce_bullet_inst: GunHitscan = gun_projectile.instantiate()
+        var bounce_bullet_inst: BaseProjectile = gun_projectile.instantiate()
         shot_direction = shot_direction.bounce(collision_normal)
         bounce_ray.global_position = last_hit_position
         bounce_ray.look_at(bounce_ray.global_position + shot_direction)
@@ -367,6 +370,12 @@ func calculate_gun_bounce(_aim_ray: RayCast3D, gun_barrel_pos: Vector3, bounce_c
             bounce_bullet_inst.init(last_hit_position, bounce_ray.get_collision_point())
             last_hit_position = bounce_ray.get_collision_point()
             get_parent().add_child(bounce_bullet_inst)
+            if bounce_ray.get_collider().is_in_group("enemy"):
+                # TODO: Damage enemy here
+                return
+            else:
+                # Hit wall/obstacle
+                bounce_bullet_inst.create_spark(bounce_ray.get_collision_point(), collision_normal)
         else:
             bounce_bullet_inst.init(last_hit_position, bounce_ray_end.global_position)
             get_parent().add_child(bounce_bullet_inst)
