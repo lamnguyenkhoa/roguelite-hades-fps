@@ -14,6 +14,7 @@ class_name Gun
 @onready var secondary_timer: Timer = $SecondaryTimer
 
 var start_charge_timestamp = 0
+var is_charging = false
 
 func play_primary_attack_anim():
     anim_state_machine.start("primary_attack")
@@ -31,7 +32,7 @@ func play_idle_anim():
     anim_state_machine.travel("idle")
 
 func try_primary_attack(only_check=false) -> bool:
-    if firerate_timer.is_stopped():
+    if firerate_timer.is_stopped() and not is_charging:
         if not only_check:
             firerate_timer.start(1.0 / data.firerate)
         return true
@@ -49,12 +50,18 @@ func check_if_animation_playing(anim_name: String):
 
 func start_charge():
     start_charge_timestamp = Time.get_ticks_msec()
+    is_charging = true
 
 # How long secondary has been hold down
-func check_charge_time():
+func release_charge():
+    is_charging = false
     if start_charge_timestamp + data.secondary_charge_time * 1000 <= Time.get_ticks_msec():
         return true
     return false
+
+func swapped_out():
+    release_charge()
+    play_idle_anim()
 
 func _on_animation_tree_animation_finished(_anim_name: StringName) -> void:
     play_idle_anim()

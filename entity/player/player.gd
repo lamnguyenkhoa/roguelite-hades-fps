@@ -215,7 +215,7 @@ func check_secondary_attack():
                     gun.start_charge()
                     gun.play_secondary_attack_hold_anim()
             elif Input.is_action_just_released("secondary_attack"):
-                if gun.check_charge_time():
+                if gun.release_charge():
                     if gun.try_secondary_attack():
                         gun.play_secondary_attack_release_anim()
                         perform_attack(gun, true, gun.data.secondary_bounce_time, gun.data.secondary_pierce)
@@ -287,8 +287,9 @@ func swap_gun():
     is_swapping_gun = true
     tween.tween_property(gun_container, "position:y", -0.5, SWAP_GUN_TIME).set_trans(Tween.TRANS_LINEAR)
     await get_tree().create_timer(SWAP_GUN_TIME * 1.5).timeout
-    for child in gun_container.get_children():
+    for child: Gun in gun_container.get_children():
         child.visible = false
+        child.swapped_out()
     gun_container.get_child(current_gun_slot).visible = true
     is_swapping_gun = false
 
