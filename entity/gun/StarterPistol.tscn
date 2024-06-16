@@ -1,9 +1,10 @@
-[gd_scene load_steps=32 format=3 uid="uid://oai4dltwisn0"]
+[gd_scene load_steps=33 format=3 uid="uid://oai4dltwisn0"]
 
 [ext_resource type="Script" path="res://entity/gun/gun.gd" id="1_nvt8k"]
 [ext_resource type="Resource" uid="uid://fglfjk2qrbee" path="res://entity/gun/data/starter_pistol.tres" id="2_gfvof"]
 [ext_resource type="PackedScene" uid="uid://dtf2h2dydbopt" path="res://entity/gun/projectiles/GunHitscan.tscn" id="3_fc6cq"]
 [ext_resource type="PackedScene" uid="uid://na8rt7u4d18y" path="res://entity/gun/projectiles/StarterPistolSecondaryHitscan.tscn" id="4_67s47"]
+[ext_resource type="PackedScene" uid="uid://d3ulx8v6ei5uu" path="res://entity/gun/vfx/MuzzleFlash.tscn" id="5_usloy"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_466np"]
 resource_name = "dark"
@@ -400,7 +401,7 @@ secondary_projetile = ExtResource("4_67s47")
 transform = Transform3D(-1, 0, 2.53518e-06, 0, 1, 0, -2.53518e-06, 0, -1, 0, 0, 0)
 
 [node name="ModelParent2" type="Node3D" parent="ModelParent"]
-transform = Transform3D(1, 0, 0, 0, 1, -4.46638e-06, 0, 4.46638e-06, 1, 0, 0.00445832, 0)
+transform = Transform3D(1, 0, 0, 0, 1, -4.46638e-06, 0, 4.46638e-06, 1, 0, 0.00729283, 0)
 
 [node name="blasterC" type="MeshInstance3D" parent="ModelParent/ModelParent2"]
 transform = Transform3D(1, -1.04083e-17, 2.6226e-06, -1.17135e-11, 1, 4.46639e-06, -2.6226e-06, -4.46639e-06, 1, 0, 0, 0)
@@ -410,6 +411,8 @@ skeleton = NodePath("")
 
 [node name="Barrel" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000408289, 0.0081782, -0.313515)
+
+[node name="MuzzleFlash" parent="Barrel" instance=ExtResource("5_usloy")]
 
 [node name="FireRateTimer" type="Timer" parent="."]
 one_shot = true

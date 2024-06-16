@@ -240,6 +240,7 @@ func perform_attack(gun: Gun, is_secondary: bool=false, bounce_count=0, _is_pier
     player_camera.rotate_y(randf_range( - screenshake_amount / RECOIL_COEFFICIENT, screenshake_amount / RECOIL_COEFFICIENT))
 
     play_sfx(gun_sfx)
+    gun.play_muzzle_flash()
     var bullet_inst: BaseProjectile = gun_projectile.instantiate()
     var bullet_start_pos = gun.barrel.global_position
     # Randomize bullet start pos a bit

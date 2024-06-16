@@ -9,9 +9,9 @@ class_name Gun
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var anim_tree: AnimationTree = $AnimationTree
 @onready var anim_state_machine: AnimationNodeStateMachinePlayback = anim_tree["parameters/playback"]
-
 @onready var firerate_timer: Timer = $FireRateTimer
 @onready var secondary_timer: Timer = $SecondaryTimer
+@onready var muzzle_flash: MuzzleFlash = $Barrel/MuzzleFlash
 
 var start_charge_timestamp = 0
 var is_charging = false
@@ -44,6 +44,10 @@ func try_secondary_attack(only_check=false) -> bool:
             secondary_timer.start(data.secondary_cooldown)
         return true
     return false
+
+func play_muzzle_flash():
+    if muzzle_flash:
+        muzzle_flash.flash()
 
 func check_if_animation_playing(anim_name: String):
     return anim_state_machine.get_current_node() == anim_name

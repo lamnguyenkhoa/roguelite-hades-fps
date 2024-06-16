@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://q20db1yg4vdk"]
 
-[ext_resource type="Script" path="res://entity/gun/spark_fx/bullet_spark.gd" id="1_w73ku"]
+[ext_resource type="Script" path="res://entity/gun/vfx/bullet_spark.gd" id="1_w73ku"]
 
 [sub_resource type="Gradient" id="Gradient_w56hi"]
 offsets = PackedFloat32Array(0, 0.222749, 0.419431, 0.680095)

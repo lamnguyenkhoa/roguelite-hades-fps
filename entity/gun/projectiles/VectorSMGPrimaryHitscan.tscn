@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://d4jbfgjx5ny48"]
 
 [ext_resource type="Script" path="res://entity/gun/projectiles/gun_hitscan.gd" id="1_8djkf"]
-[ext_resource type="PackedScene" uid="uid://q20db1yg4vdk" path="res://entity/gun/spark_fx/BulletSpark.tscn" id="2_w2pid"]
+[ext_resource type="PackedScene" uid="uid://q20db1yg4vdk" path="res://entity/gun/vfx/BulletSpark.tscn" id="2_w2pid"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4kh18"]
 transparency = 1
