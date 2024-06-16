@@ -22,11 +22,15 @@ func _process(delta):
 	material_override.albedo_color.a = alpha
 
 func create_spark(pos: Vector3, normal: Vector3):
-	var relative_normal = pos + normal
 	var spark_inst = spark_effect.instantiate()
 	get_parent().add_child(spark_inst)
 	spark_inst.global_position = pos
-	spark_inst.look_at(relative_normal, Vector3.UP)
+	if normal == Vector3.DOWN:
+		spark_inst.rotation_degrees.x = -90
+	elif normal == Vector3.UP:
+		spark_inst.rotation_degrees.x = 90
+	else:
+		spark_inst.look_at(pos + normal, Vector3.UP)
 
 # func trigger_particles(pos, gun_pos, on_enemy):
 # 	if on_enemy:
