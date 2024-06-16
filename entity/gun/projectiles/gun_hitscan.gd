@@ -25,22 +25,13 @@ func create_spark(pos: Vector3, normal: Vector3):
 	var spark_inst = spark_effect.instantiate()
 	get_parent().add_child(spark_inst)
 	spark_inst.global_position = pos
-	if normal == Vector3.DOWN:
+
+	if normal.is_equal_approx(Vector3.DOWN):
 		spark_inst.rotation_degrees.x = -90
-	elif normal == Vector3.UP:
+	elif normal.is_equal_approx(Vector3.UP):
 		spark_inst.rotation_degrees.x = 90
 	else:
 		spark_inst.look_at(pos + normal, Vector3.UP)
-
-# func trigger_particles(pos, gun_pos, on_enemy):
-# 	if on_enemy:
-# 		blood.position = pos
-# 		blood.look_at(gun_pos)
-# 		blood.emitting = true
-# 	else:
-# 		terrain.position = pos
-# 		terrain.look_at(gun_pos)
-# 		terrain.emitting = true
 
 func _on_timer_timeout():
 	queue_free()

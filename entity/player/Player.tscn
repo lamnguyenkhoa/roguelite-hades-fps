@@ -74,6 +74,7 @@ transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.051, -0.1, -0.185)
 visible = false
 
 [node name="AimRay" parent="Neck/ShakeableCamera" instance=ExtResource("5_dqbuo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000178993, -0.462722)
 
 [node name="DashDuration" type="Timer" parent="."]
 editor_description = "How long the dash action last"

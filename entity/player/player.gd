@@ -356,7 +356,6 @@ func calculate_gun_bounce(_aim_ray: RayCast3D, gun_barrel_pos: Vector3, bounce_c
 
     await get_tree().physics_frame
     await get_tree().physics_frame
-
     for i in range(bounce_count):
         var collision_normal = bounce_ray.get_collision_normal()
         var bounce_bullet_inst: BaseProjectile = gun_projectile.instantiate()
@@ -375,7 +374,7 @@ func calculate_gun_bounce(_aim_ray: RayCast3D, gun_barrel_pos: Vector3, bounce_c
                 return
             else:
                 # Hit wall/obstacle
-                bounce_bullet_inst.create_spark(bounce_ray.get_collision_point(), collision_normal)
+                bounce_bullet_inst.create_spark(bounce_ray.get_collision_point(), bounce_ray.get_collision_normal())
         else:
             bounce_bullet_inst.init(last_hit_position, bounce_ray_end.global_position)
             get_parent().add_child(bounce_bullet_inst)

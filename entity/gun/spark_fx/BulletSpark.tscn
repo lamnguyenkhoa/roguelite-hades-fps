@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://q20db1yg4vdk"]
+[gd_scene load_steps=9 format=3 uid="uid://q20db1yg4vdk"]
 
 [ext_resource type="Script" path="res://entity/gun/spark_fx/bullet_spark.gd" id="1_w73ku"]
 
@@ -20,14 +20,15 @@ curve = SubResource("Curve_6a1fe")
 lifetime_randomness = 0.3
 angle_min = -30.0
 angle_max = 30.0
-direction = Vector3(0, 1, -1)
-spread = 0.0
+direction = Vector3(0, 0, -1)
 initial_velocity_min = 3.0
 initial_velocity_max = 6.0
 angular_velocity_min = -45.0
 angular_velocity_max = 45.0
-scale_min = 0.5
-scale_max = 2.0
+linear_accel_min = -5.0
+linear_accel_max = -5.0
+scale_min = 0.75
+scale_max = 1.25
 scale_curve = SubResource("CurveTexture_iwupy")
 color_ramp = SubResource("GradientTexture1D_idfh0")
 
@@ -43,22 +44,17 @@ particles_anim_loop = false
 
 [sub_resource type="QuadMesh" id="QuadMesh_iy2t6"]
 material = SubResource("StandardMaterial3D_p54np")
-size = Vector2(0.3, 0.3)
-
-[sub_resource type="BoxMesh" id="BoxMesh_0nrqm"]
-size = Vector3(0.2, 0.1, 1)
+size = Vector2(0.2, 0.2)
 
 [node name="BulletSpark" type="GPUParticles3D"]
+emitting = false
 amount = 15
+one_shot = true
 explosiveness = 1.0
 randomness = 0.5
-visibility_aabb = AABB(-3.7259, -6.22061, -5.93897, 7.58408, 7.73858, 7.16073)
+visibility_aabb = AABB(-2.09474, -3.78992, -3.45481, 4.16517, 4.57921, 3.65482)
 process_material = SubResource("ParticleProcessMaterial_k1q2q")
 draw_pass_1 = SubResource("QuadMesh_iy2t6")
 script = ExtResource("1_w73ku")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0025939, -0.491031)
-mesh = SubResource("BoxMesh_0nrqm")
 
 [connection signal="finished" from="." to="." method="_on_finished"]
