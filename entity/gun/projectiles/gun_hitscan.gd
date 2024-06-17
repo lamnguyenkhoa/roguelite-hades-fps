@@ -29,6 +29,9 @@ func _process(delta):
 	if shot_flash_start:
 		shot_flash_start.modulate.a = clamp(alpha, 0, 1)
 
+func get_projectile_color() -> Color:
+	return material_override.albedo_color
+
 func create_spark(pos: Vector3, normal: Vector3):
 	var spark_inst = spark_effect.instantiate()
 	get_parent().add_child(spark_inst)

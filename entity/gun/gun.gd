@@ -45,9 +45,16 @@ func try_secondary_attack(only_check=false) -> bool:
         return true
     return false
 
-func play_muzzle_flash():
+func play_muzzle_flash(is_secondary_attack=false):
     if muzzle_flash:
-        muzzle_flash.flash()
+        var tmp: GunHitscan
+        if not is_secondary_attack:
+            tmp = primary_projectile.instantiate()
+        else:
+            tmp = secondary_projetile.instantiate()
+        var light_color = tmp.get_projectile_color()
+        muzzle_flash.flash(light_color)
+        tmp.queue_free()
 
 func check_if_animation_playing(anim_name: String):
     return anim_state_machine.get_current_node() == anim_name
