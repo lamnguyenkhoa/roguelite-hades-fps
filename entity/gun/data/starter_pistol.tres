@@ -11,14 +11,15 @@ description = "Punchy pistol with ricochet secondary attack.
 
 LMB: Fire a hitscan shot.
 RMB: Charge up to fire a 3-times ricochet hitscan shot."
-damage = 10.0
 firerate = 2.4
 projectile_speed = 0.0
 is_hitscan = true
+primary_damage = 5
 primary_sfx = ExtResource("1_hj13e")
 primary_bounce_time = 0
 primary_pierce = false
 primary_screenshake = 0.2
+secondary_damage = 10
 secondary_type = 4
 secondary_sfx = ExtResource("3_wkeeg")
 secondary_cooldown = 1.0

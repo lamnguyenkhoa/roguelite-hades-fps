@@ -1,6 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://q20db1yg4vdk"]
+[gd_scene load_steps=9 format=3 uid="uid://i7pid4y24r8b"]
 
-[ext_resource type="Script" path="res://entity/gun/vfx/bullet_spark.gd" id="1_w73ku"]
+[ext_resource type="Script" path="res://entity/common/self_destruct_3dparticle.gd" id="1_28egn"]
 
 [sub_resource type="Gradient" id="Gradient_w56hi"]
 offsets = PackedFloat32Array(0, 0.222749, 0.419431, 0.680095)
@@ -55,6 +55,6 @@ randomness = 0.5
 visibility_aabb = AABB(-2.09474, -3.78992, -3.45481, 4.16517, 4.57921, 3.65482)
 process_material = SubResource("ParticleProcessMaterial_k1q2q")
 draw_pass_1 = SubResource("QuadMesh_iy2t6")
-script = ExtResource("1_w73ku")
+script = ExtResource("1_28egn")
 
 [connection signal="finished" from="." to="." method="_on_finished"]
