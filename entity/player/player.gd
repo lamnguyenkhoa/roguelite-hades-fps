@@ -19,6 +19,7 @@ class_name Player
 @onready var gun_container = $Neck/ShakeableCamera/GunContainer
 @onready var aim_ray: RayCast3D = $Neck/ShakeableCamera/AimRay
 @onready var aim_ray_end: Marker3D = $Neck/ShakeableCamera/AimRay/AimRayEnd
+@onready var hitmarker: TextureRect = $Neck/ShakeableCamera/HitMarker
 
 var landing_sfx = preload ("res://asset/sfx/player/jump_landing.wav")
 
@@ -93,7 +94,8 @@ func _input(event):
 		current_gun_slot = 1
 		swap_gun()
 
-func _process(_delta):
+func _process(delta):
+	hitmarker.modulate.a = clamp(hitmarker.modulate.a - delta * 3, 0, 1)
 	if not is_swapping_gun:
 		check_primary_attack()
 		check_secondary_attack()
@@ -253,16 +255,20 @@ func perform_attack(gun: Gun, is_secondary: bool=false, bounce_count=0, _is_pier
 		get_parent().add_child(bullet_inst)
 		var collision_normal = aim_ray.get_collision_normal()
 		if aim_ray.get_collider() is Enemy:
+			flash_hitmarker()
 			var enemy: Enemy = aim_ray.get_collider()
-			enemy.damaged(damage)
+			var killed = enemy.damaged(damage)
+			if killed:
+				flash_hitmarker(Color.RED)
+			else:
+				flash_hitmarker()
 			enemy.play_on_damaged_effect(aim_ray.get_collision_point(), collision_normal)
-			return
 		else:
 			# Hit wall/obstacle
 			bullet_inst.create_spark(aim_ray.get_collision_point(), collision_normal)
 		# Do gun bounce thing
 		if bounce_count > 0:
-			calculate_gun_bounce(aim_ray, bullet_start_pos, bounce_count, gun_projectile)
+			calculate_gun_bounce(aim_ray, bullet_start_pos, bounce_count, gun_projectile, damage)
 	else:
 		bullet_inst.init(bullet_start_pos, aim_ray_end.global_position)
 		get_parent().add_child(bullet_inst)
@@ -350,7 +356,11 @@ func moving_toward_wall() -> bool:
 		return true
 	return false
 
-func calculate_gun_bounce(_aim_ray: RayCast3D, gun_barrel_pos: Vector3, bounce_count: int, gun_projectile: PackedScene):
+func flash_hitmarker(color: Color = Color.YELLOW):
+	hitmarker.modulate = color
+	hitmarker.modulate.a = 1
+
+func calculate_gun_bounce(_aim_ray: RayCast3D, gun_barrel_pos: Vector3, bounce_count: int, gun_projectile: PackedScene, damage: int):
 	var bounce_ray: RayCast3D = bounce_ray_prefab.instantiate()
 	var bounce_ray_end = bounce_ray.get_node("AimRayEnd")
 	var last_hit_position = _aim_ray.get_collision_point()
@@ -374,9 +384,14 @@ func calculate_gun_bounce(_aim_ray: RayCast3D, gun_barrel_pos: Vector3, bounce_c
 			bounce_bullet_inst.init(last_hit_position, bounce_ray.get_collision_point())
 			last_hit_position = bounce_ray.get_collision_point()
 			get_parent().add_child(bounce_bullet_inst)
-			if bounce_ray.get_collider().is_in_group("enemy"):
-				# TODO: Damage enemy here
-				return
+			if bounce_ray.get_collider() is Enemy:
+				var enemy: Enemy = bounce_ray.get_collider()
+				var killed = enemy.damaged(damage)
+				if killed:
+					flash_hitmarker(Color.RED)
+				else:
+					flash_hitmarker()
+				enemy.play_on_damaged_effect(bounce_ray.get_collision_point(), collision_normal)
 			else:
 				# Hit wall/obstacle
 				bounce_bullet_inst.create_spark(bounce_ray.get_collision_point(), bounce_ray.get_collision_normal())

@@ -1,12 +1,13 @@
-[gd_scene load_steps=16 format=3 uid="uid://7s75qf3um0h0"]
+[gd_scene load_steps=17 format=3 uid="uid://7s75qf3um0h0"]
 
 [ext_resource type="Script" path="res://entity/player/player.gd" id="1_rl0vi"]
-[ext_resource type="Texture2D" uid="uid://ctkoyf8rtxhqs" path="res://asset/ui/crosshair.png" id="2_tyg2i"]
 [ext_resource type="Texture2D" uid="uid://ddwxkjlbdh8hq" path="res://asset/sprite/blob_shadow.png" id="3_tgexf"]
 [ext_resource type="PackedScene" uid="uid://oai4dltwisn0" path="res://entity/gun/StarterPistol.tscn" id="3_wg1yd"]
 [ext_resource type="PackedScene" uid="uid://by6prw5q6j6sk" path="res://entity/player/ShakeableCamera.tscn" id="4_37fec"]
+[ext_resource type="Texture2D" uid="uid://b5e6b8k4p1iw0" path="res://asset/ui/default_crosshair.png" id="4_ymis7"]
 [ext_resource type="PackedScene" uid="uid://cd1tqjm2e87jy" path="res://entity/player/AimRay.tscn" id="5_dqbuo"]
 [ext_resource type="PackedScene" uid="uid://dq2l72hrdmbds" path="res://entity/gun/VectorSMG.tscn" id="5_gioix"]
+[ext_resource type="Texture2D" uid="uid://bhyt4cp422lbb" path="res://asset/ui/hitmarker_lg.png" id="5_nkt42"]
 [ext_resource type="PackedScene" uid="uid://byj1y3wrwtdtq" path="res://ui/PauseUI.tscn" id="5_srijb"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="6_t33b7"]
 [ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="7_1276k"]
@@ -48,13 +49,29 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -8.0
-offset_top = -8.0
-offset_right = 8.0
-offset_bottom = 8.0
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_tyg2i")
+texture = ExtResource("4_ymis7")
+
+[node name="HitMarker" type="TextureRect" parent="Neck/ShakeableCamera"]
+modulate = Color(1, 0.976471, 0.388235, 1)
+texture_filter = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_nkt42")
 
 [node name="DebugLabel" type="Label" parent="Neck/ShakeableCamera"]
 offset_left = 8.0

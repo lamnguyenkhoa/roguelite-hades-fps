@@ -26,10 +26,13 @@ func _physics_process(delta):
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 	move_and_slide()
 
-func damaged(value: int):
+## Return true if this kill enemy
+func damaged(value: int) -> bool:
 	current_hp = clamp(current_hp - value, 0, data.max_hp)
 	if current_hp <= 0:
 		dead()
+		return true
+	return false
 
 func play_on_damaged_effect(pos: Vector3, normal: Vector3):
 	var bs_inst = bloodsplatter.instantiate()

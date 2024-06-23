@@ -133,3 +133,6 @@ bus = &"BGM"
 
 [node name="DummyEnemy" parent="." instance=ExtResource("7_8w4jv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7455, 0)
+
+[node name="DummyEnemy2" parent="." instance=ExtResource("7_8w4jv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0993, 1.7455, 0)
