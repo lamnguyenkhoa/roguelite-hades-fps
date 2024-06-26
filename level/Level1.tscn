@@ -1,0 +1,67 @@
+[gd_scene load_steps=7 format=3 uid="uid://c1bh7fpi21j3r"]
+
+[ext_resource type="Environment" uid="uid://bnsi5blt3qbue" path="res://level/world_environment.tres" id="1_gfpwv"]
+[ext_resource type="Material" uid="uid://p2sj02iixgy2" path="res://material/grid_mat.tres" id="2_seia2"]
+[ext_resource type="Material" uid="uid://ckee7r277nvyg" path="res://material/grid_mat2.tres" id="3_sx1bs"]
+[ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://entity/player/Player.tscn" id="4_0h31y"]
+[ext_resource type="AudioStream" uid="uid://7c5wkufm1y7w" path="res://asset/bgm/ambience_d21_loop.ogg" id="5_f7hgp"]
+[ext_resource type="PackedScene" uid="uid://d0wmejqbc8i1o" path="res://entity/enemy/dummy/DummyEnemy.tscn" id="6_iraej"]
+
+[node name="Level1" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("1_gfpwv")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, 0, 6.98508, 0)
+layers = 3
+shadow_enabled = true
+shadow_opacity = 0.75
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
+operation = 1
+snap = 0.25
+use_collision = true
+
+[node name="Ground" type="CSGBox3D" parent="CSGCombiner3D"]
+size = Vector3(50, 1, 100)
+material = ExtResource("2_seia2")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.5, 5.5, 0)
+size = Vector3(1, 10, 100)
+material = ExtResource("3_sx1bs")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.5, 5.5, 0)
+size = Vector3(1, 10, 100)
+material = ExtResource("3_sx1bs")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, -50.5)
+size = Vector3(50, 10, 1)
+material = ExtResource("3_sx1bs")
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 50.5)
+size = Vector3(50, 10, 1)
+material = ExtResource("3_sx1bs")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Player" parent="." instance=ExtResource("4_0h31y")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -22.4604, 1.91076, -42.2859)
+collision_layer = 4
+collision_mask = 3
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+process_mode = 3
+stream = ExtResource("5_f7hgp")
+autoplay = true
+bus = &"BGM"
+
+[node name="DummyEnemy" parent="." instance=ExtResource("6_iraej")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7455, 0)
+
+[node name="DummyEnemy2" parent="." instance=ExtResource("6_iraej")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0993, 1.7455, 0)

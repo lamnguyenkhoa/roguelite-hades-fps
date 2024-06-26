@@ -119,6 +119,7 @@ offset_bottom = 256.0
 grow_horizontal = 0
 grow_vertical = 1
 initial_node_to_watch = NodePath("../../Player")
+metadata/_edit_use_anchors_ = true
 
 [node name="Player" parent="." instance=ExtResource("1_i0lhh")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 1.91076, -6.26333)
