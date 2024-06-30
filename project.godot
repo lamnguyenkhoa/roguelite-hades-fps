@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="roguelite-hades-fps"
-run/main_scene="res://level/TestLevel.tscn"
+run/main_scene="res://level/Level1.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -31,7 +31,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot_state_charts/plugin.cfg")
+enabled=PackedStringArray("res://addons/godot_state_charts/plugin.cfg", "res://addons/proto_shape/plugin.cfg")
 
 [input]
 

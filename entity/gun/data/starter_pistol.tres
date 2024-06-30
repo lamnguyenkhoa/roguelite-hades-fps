@@ -24,6 +24,6 @@ secondary_type = 4
 secondary_sfx = ExtResource("3_wkeeg")
 secondary_cooldown = 1.0
 secondary_charge_time = 0.5
-secondary_bounce_time = 3
+secondary_bounce_time = 5
 secondary_pierce = false
 secondary_screenshake = 0.4
