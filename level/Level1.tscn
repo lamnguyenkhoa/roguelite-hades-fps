@@ -62,6 +62,7 @@ environment = SubResource("Environment_pa01f")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, 0, 6.98508, 0)
+visible = false
 layers = 3
 shadow_enabled = true
 shadow_opacity = 0.75
@@ -199,3 +200,9 @@ use_collision = true
 radius = 1.0
 height = 30.0
 material = SubResource("StandardMaterial3D_1nnrp")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.543, 0.645562)
+light_energy = 5.0
+shadow_enabled = true
+omni_range = 50.0
