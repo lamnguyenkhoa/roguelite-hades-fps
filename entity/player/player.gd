@@ -245,33 +245,11 @@ func perform_attack(gun: Gun, is_secondary: bool=false, bounce_count=0, _is_pier
 
 	play_sfx(gun_sfx)
 	gun.play_muzzle_flash(is_secondary)
-	var bullet_inst: BaseProjectile = gun_projectile.instantiate()
 	var bullet_start_pos = gun.barrel.global_position
 	# Randomize bullet start pos a bit
 	bullet_start_pos.x += randf_range( - screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
 	bullet_start_pos.y += randf_range( - screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
-	if aim_ray.is_colliding():
-		bullet_inst.init(bullet_start_pos, aim_ray.get_collision_point())
-		get_parent().add_child(bullet_inst)
-		var collision_normal = aim_ray.get_collision_normal()
-		if aim_ray.get_collider() is Enemy:
-			flash_hitmarker()
-			var enemy: Enemy = aim_ray.get_collider()
-			var killed = enemy.damaged(damage)
-			if killed:
-				flash_hitmarker(Color.RED)
-			else:
-				flash_hitmarker()
-			enemy.play_on_damaged_effect(aim_ray.get_collision_point(), collision_normal)
-		else:
-			# Hit wall/obstacle
-			bullet_inst.create_spark(aim_ray.get_collision_point(), collision_normal)
-		# Do gun bounce thing
-		if bounce_count > 0:
-			calculate_gun_bounce(aim_ray, bullet_start_pos, bounce_count, gun_projectile, damage)
-	else:
-		bullet_inst.init(bullet_start_pos, aim_ray_end.global_position)
-		get_parent().add_child(bullet_inst)
+	create_hitscan_attack(bullet_start_pos, (aim_ray_end.global_position - bullet_start_pos), bounce_count, gun_projectile, damage)
 
 func rotate_player(event):
 	rotate(Vector3(0, -1, 0), event.relative.x * (GameManager.mouse_sensitivity / 10000))
@@ -360,47 +338,38 @@ func flash_hitmarker(color: Color = Color.YELLOW):
 	hitmarker.modulate = color
 	hitmarker.modulate.a = 1
 
-func calculate_gun_bounce(_aim_ray: RayCast3D, gun_barrel_pos: Vector3, bounce_count: int, gun_projectile: PackedScene, damage: int):
-	var bounce_ray: RayCast3D = bounce_ray_prefab.instantiate()
-	var bounce_ray_end = bounce_ray.get_node("AimRayEnd")
-	var last_hit_position = _aim_ray.get_collision_point()
-	var shot_direction = (_aim_ray.get_collision_point() - gun_barrel_pos).normalized()
-	get_parent().add_child(bounce_ray)
-	bounce_ray.look_at(bounce_ray.global_position + shot_direction)
-	bounce_ray.global_position = _aim_ray.global_position
+func create_hitscan_attack(start_pos: Vector3, direction: Vector3, bounce_left: int, gun_projectile: PackedScene, damage: int):
+	var hitscan_ray: RayCast3D = bounce_ray_prefab.instantiate()
+	var hitscan_ray_end = hitscan_ray.get_node("AimRayEnd")
+	get_parent().add_child(hitscan_ray)
+	hitscan_ray.global_position = start_pos
+	hitscan_ray.look_at(start_pos + direction)
+	var bullet_inst: BaseProjectile = gun_projectile.instantiate()
 
 	await get_tree().physics_frame
 	await get_tree().physics_frame
-	for i in range(bounce_count):
-		var collision_normal = bounce_ray.get_collision_normal()
-		var bounce_bullet_inst: BaseProjectile = gun_projectile.instantiate()
-		shot_direction = shot_direction.bounce(collision_normal)
-		bounce_ray.global_position = last_hit_position
-		bounce_ray.look_at(bounce_ray.global_position + shot_direction)
-
-		await get_tree().physics_frame
-		await get_tree().physics_frame
-		if bounce_ray.is_colliding():
-			bounce_bullet_inst.init(last_hit_position, bounce_ray.get_collision_point())
-			last_hit_position = bounce_ray.get_collision_point()
-			get_parent().add_child(bounce_bullet_inst)
-			if bounce_ray.get_collider() is Enemy:
-				var enemy: Enemy = bounce_ray.get_collider()
-				var killed = enemy.damaged(damage)
-				if killed:
-					flash_hitmarker(Color.RED)
-				else:
-					flash_hitmarker()
-				enemy.play_on_damaged_effect(bounce_ray.get_collision_point(), collision_normal)
+	if hitscan_ray.is_colliding():
+		var hitscan_col_point = hitscan_ray.get_collision_point()
+		var hitscan_col_normal = hitscan_ray.get_collision_normal()
+		bullet_inst.init(start_pos, hitscan_col_point)
+		get_parent().add_child(bullet_inst)
+		if hitscan_ray.get_collider() is Enemy:
+			var enemy: Enemy = hitscan_ray.get_collider()
+			var killed = enemy.damaged(damage)
+			if killed:
+				flash_hitmarker(Color.RED)
 			else:
-				# Hit wall/obstacle
-				bounce_bullet_inst.create_spark(bounce_ray.get_collision_point(), bounce_ray.get_collision_normal())
+				flash_hitmarker()
+			enemy.play_on_damaged_effect(hitscan_col_point, hitscan_col_normal)
 		else:
-			bounce_bullet_inst.init(last_hit_position, bounce_ray_end.global_position)
-			get_parent().add_child(bounce_bullet_inst)
-			break
-
-	bounce_ray.call_deferred("queue_free")
+			# Hit wall/obstacle
+			bullet_inst.create_spark(hitscan_col_point, hitscan_col_normal)
+		
+		if bounce_left > 0:
+			create_hitscan_attack(hitscan_col_point, direction.bounce(hitscan_col_normal), bounce_left - 1, gun_projectile, damage)
+	else:
+		bullet_inst.init(start_pos, hitscan_ray_end.global_position)
+		get_parent().add_child(bullet_inst)
 
 func _on_coyote_timer_timeout():
 	can_coyote_jump = false
