@@ -236,12 +236,6 @@ func perform_attack(gun: Gun, is_secondary: bool=false, bounce_count=0, _is_pier
 		screenshake_amount = gun.data.secondary_screenshake
 		gun_sfx = gun.data.secondary_sfx
 		damage = gun.data.secondary_damage
-	# Screenshake
-	player_camera.add_trauma(screenshake_amount)
-	# Recoil
-	player_camera.rotate_x(screenshake_amount / RECOIL_COEFFICIENT)
-	player_camera.rotate_y(randf_range( - screenshake_amount / RECOIL_COEFFICIENT, screenshake_amount / RECOIL_COEFFICIENT))
-
 	play_sfx(gun_sfx)
 	gun.play_muzzle_flash(is_secondary)
 	var bullet_start_pos = gun.barrel.global_position
@@ -249,6 +243,11 @@ func perform_attack(gun: Gun, is_secondary: bool=false, bounce_count=0, _is_pier
 	bullet_start_pos.x += randf_range( - screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
 	bullet_start_pos.y += randf_range( - screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
 	create_hitscan_attack(bullet_start_pos, (aim_ray.aim_ray_end.global_position - bullet_start_pos), bounce_count, gun_projectile, damage)
+	# Screenshake
+	player_camera.add_trauma(screenshake_amount)
+	# Recoil
+	player_camera.rotate_x(screenshake_amount / RECOIL_COEFFICIENT)
+	player_camera.rotate_y(randf_range( - screenshake_amount / RECOIL_COEFFICIENT, screenshake_amount / RECOIL_COEFFICIENT))
 
 func rotate_player(event):
 	rotate(Vector3(0, -1, 0), event.relative.x * (GameManager.mouse_sensitivity / 10000))
@@ -333,7 +332,7 @@ func moving_toward_wall() -> bool:
 		return true
 	return false
 
-func flash_hitmarker(color: Color = Color.YELLOW):
+func flash_hitmarker(color: Color=Color.YELLOW):
 	hitmarker.modulate = color
 	hitmarker.modulate.a = 1
 

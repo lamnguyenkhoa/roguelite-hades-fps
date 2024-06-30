@@ -73,7 +73,6 @@ shadow_opacity = 0.75
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -0.53272, 2.19355, -43.6845)
 collision_layer = 4
 collision_mask = 3
-dash_cd = 0.5
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 process_mode = 3
