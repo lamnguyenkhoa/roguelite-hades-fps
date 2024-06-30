@@ -73,6 +73,7 @@ shadow_opacity = 0.75
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -0.53272, 2.19355, -43.6845)
 collision_layer = 4
 collision_mask = 3
+dash_cd = 0.5
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 process_mode = 3
@@ -162,7 +163,7 @@ size = Vector3(15, 10, 15)
 material = ExtResource("2_seia2")
 
 [node name="ProtoRamp" type="CSGCombiner3D" parent="Environment"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.735, -7.5, -19)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, -7.5, -19)
 use_collision = true
 script = ExtResource("6_q2eb6")
 type = 0

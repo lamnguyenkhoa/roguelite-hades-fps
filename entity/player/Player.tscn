@@ -24,7 +24,7 @@ script = ExtResource("1_rl0vi")
 can_wall_jump = true
 can_wall_cling = true
 max_air_jump = 0
-bounce_ray_prefab = ExtResource("5_dqbuo")
+aim_ray_prefab = ExtResource("5_dqbuo")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_f0s2u")

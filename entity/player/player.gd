@@ -5,7 +5,7 @@ class_name Player
 @export var can_wall_cling: bool
 @export var max_air_jump = 2
 @export var dash_cd: float = 0.5
-@export var bounce_ray_prefab: PackedScene
+@export var aim_ray_prefab: PackedScene
 
 @onready var player_camera: ShakeableCamera = $Neck/ShakeableCamera
 @onready var debug_label: Label = $Neck/ShakeableCamera/DebugLabel
@@ -17,8 +17,7 @@ class_name Player
 @onready var audio_player: CharacterAudioPlayer3D = $CharacterAudioPlayer3D
 
 @onready var gun_container = $Neck/ShakeableCamera/GunContainer
-@onready var aim_ray: RayCast3D = $Neck/ShakeableCamera/AimRay
-@onready var aim_ray_end: Marker3D = $Neck/ShakeableCamera/AimRay/AimRayEnd
+@onready var aim_ray: AimRay = $Neck/ShakeableCamera/AimRay
 @onready var hitmarker: TextureRect = $Neck/ShakeableCamera/HitMarker
 
 var landing_sfx = preload ("res://asset/sfx/player/jump_landing.wav")
@@ -249,7 +248,7 @@ func perform_attack(gun: Gun, is_secondary: bool=false, bounce_count=0, _is_pier
 	# Randomize bullet start pos a bit
 	bullet_start_pos.x += randf_range( - screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
 	bullet_start_pos.y += randf_range( - screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
-	create_hitscan_attack(bullet_start_pos, (aim_ray_end.global_position - bullet_start_pos), bounce_count, gun_projectile, damage)
+	create_hitscan_attack(bullet_start_pos, (aim_ray.aim_ray_end.global_position - bullet_start_pos), bounce_count, gun_projectile, damage)
 
 func rotate_player(event):
 	rotate(Vector3(0, -1, 0), event.relative.x * (GameManager.mouse_sensitivity / 10000))
@@ -339,8 +338,8 @@ func flash_hitmarker(color: Color = Color.YELLOW):
 	hitmarker.modulate.a = 1
 
 func create_hitscan_attack(start_pos: Vector3, direction: Vector3, bounce_left: int, gun_projectile: PackedScene, damage: int):
-	var hitscan_ray: RayCast3D = bounce_ray_prefab.instantiate()
-	var hitscan_ray_end = hitscan_ray.get_node("AimRayEnd")
+	var hitscan_ray: AimRay = aim_ray_prefab.instantiate()
+	var hitscan_ray_end = hitscan_ray.aim_ray_end
 	get_parent().add_child(hitscan_ray)
 	hitscan_ray.global_position = start_pos
 	hitscan_ray.look_at(start_pos + direction)
@@ -370,6 +369,7 @@ func create_hitscan_attack(start_pos: Vector3, direction: Vector3, bounce_left: 
 	else:
 		bullet_inst.init(start_pos, hitscan_ray_end.global_position)
 		get_parent().add_child(bullet_inst)
+	hitscan_ray.call_deferred("queue_free")
 
 func _on_coyote_timer_timeout():
 	can_coyote_jump = false
