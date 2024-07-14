@@ -20,6 +20,7 @@ animations = [{
 
 [node name="MuzzleFlash" type="AnimatedSprite3D"]
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_pldl2")
 frame_progress = 1.0
 script = ExtResource("2_5hqqh")
