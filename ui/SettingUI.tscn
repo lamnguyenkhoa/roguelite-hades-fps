@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://biqm56x6ewbmo"]
+[gd_scene load_steps=3 format=3 uid="uid://biqm56x6ewbmo"]
 
 [ext_resource type="Script" path="res://ui/setting_ui.gd" id="1_05qbb"]
+[ext_resource type="PackedScene" uid="uid://cnuglobw5ctj7" path="res://ui/KeybindButton.tscn" id="2_b71wb"]
 
 [node name="SettingUI" type="Control"]
 layout_mode = 3
@@ -10,6 +11,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_05qbb")
+keybind_button_prefab = ExtResource("2_b71wb")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -54,11 +56,9 @@ offset_bottom = 256.0
 grow_horizontal = 2
 grow_vertical = 2
 tab_alignment = 1
-current_tab = 1
 tabs_visible = false
 
 [node name="Control" type="Control" parent="TabContainer"]
-visible = false
 layout_mode = 2
 
 [node name="Title" type="Label" parent="TabContainer/Control"]
@@ -73,19 +73,31 @@ grow_horizontal = 2
 theme_override_font_sizes/font_size = 40
 text = "Control"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Control"]
-layout_mode = 0
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Control"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 offset_left = 32.0
 offset_top = 80.0
-offset_right = 800.0
-offset_bottom = 472.0
+offset_right = -32.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Control/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_constants/separation = 10
 
-[node name="MouseSens" type="Control" parent="TabContainer/Control/VBoxContainer"]
+[node name="MouseSens" type="Control" parent="TabContainer/Control/ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="TabContainer/Control/VBoxContainer/MouseSens"]
+[node name="Label" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens"]
 layout_mode = 0
 offset_right = 220.0
 offset_bottom = 42.0
@@ -93,7 +105,7 @@ theme_override_font_sizes/font_size = 26
 text = "Mouse Sensitivity
 "
 
-[node name="MouseSenSlider" type="HSlider" parent="TabContainer/Control/VBoxContainer/MouseSens"]
+[node name="MouseSenSlider" type="HSlider" parent="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens"]
 layout_mode = 0
 offset_left = 296.0
 offset_top = 16.0
@@ -102,22 +114,42 @@ offset_bottom = 32.0
 min_value = 1.0
 value = 1.0
 
-[node name="Value" type="Label" parent="TabContainer/Control/VBoxContainer/MouseSens"]
+[node name="Value" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -80.0
+offset_left = -66.0
 offset_top = -12.0
+offset_right = 14.0
 offset_bottom = 11.0
 grow_horizontal = 0
 grow_vertical = 2
 text = "100"
 horizontal_alignment = 1
 
+[node name="KeybindingSection" type="VBoxContainer" parent="TabContainer/Control/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.498039, 0.498039, 0.498039, 1)
+theme_override_font_sizes/font_size = 26
+text = "Keybindings"
+horizontal_alignment = 1
+
+[node name="ResetKeybindButton" type="Button" parent="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 26
+text = "Reset to default"
+
 [node name="Graphic" type="Control" parent="TabContainer"]
+visible = false
 layout_mode = 2
 
 [node name="Title" type="Label" parent="TabContainer/Graphic"]
@@ -168,8 +200,9 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -80.0
+offset_left = -66.0
 offset_top = -12.0
+offset_right = 14.0
 offset_bottom = 11.0
 grow_horizontal = 0
 grow_vertical = 2
@@ -523,8 +556,10 @@ text = "<< Back"
 [connection signal="pressed" from="VBoxContainer/GraphicOption" to="." method="_on_graphic_option_pressed"]
 [connection signal="mouse_entered" from="VBoxContainer/AudioOption" to="." method="play_button_hover_sfx"]
 [connection signal="pressed" from="VBoxContainer/AudioOption" to="." method="_on_audio_option_pressed"]
-[connection signal="mouse_entered" from="TabContainer/Control/VBoxContainer/MouseSens/MouseSenSlider" to="." method="play_button_hover_sfx"]
-[connection signal="value_changed" from="TabContainer/Control/VBoxContainer/MouseSens/MouseSenSlider" to="." method="_on_mouse_sen_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/MouseSenSlider" to="." method="play_button_hover_sfx"]
+[connection signal="value_changed" from="TabContainer/Control/ScrollContainer/VBoxContainer/MouseSens/MouseSenSlider" to="." method="_on_mouse_sen_slider_value_changed"]
+[connection signal="mouse_entered" from="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection/ResetKeybindButton" to="." method="_on_reset_keybind_button_mouse_entered"]
+[connection signal="pressed" from="TabContainer/Control/ScrollContainer/VBoxContainer/KeybindingSection/ResetKeybindButton" to="." method="_on_reset_keybind_button_pressed"]
 [connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/FOV/FOVSlider" to="." method="play_button_hover_sfx"]
 [connection signal="value_changed" from="TabContainer/Graphic/VBoxContainer/FOV/FOVSlider" to="." method="_on_fov_slider_value_changed"]
 [connection signal="mouse_entered" from="TabContainer/Graphic/VBoxContainer/CameraTilt/CameraTiltToggle" to="." method="play_button_hover_sfx"]

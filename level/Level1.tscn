@@ -112,10 +112,22 @@ use_collision = true
 size = Vector3(20, 10, 15)
 material = SubResource("StandardMaterial3D_kchnc")
 
+[node name="CSGBox3D9" type="CSGBox3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45, -6, 19)
+use_collision = true
+size = Vector3(5, 5, 5)
+material = SubResource("StandardMaterial3D_ukoqd")
+
 [node name="CSGBox3D5" type="CSGBox3D" parent="Environment"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.5, -3, 9.5)
 use_collision = true
 size = Vector3(5, 5, 5)
+material = SubResource("StandardMaterial3D_ukoqd")
+
+[node name="CSGBox3D10" type="CSGBox3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -6, 18)
+use_collision = true
+size = Vector3(4, 4, 4)
 material = SubResource("StandardMaterial3D_ukoqd")
 
 [node name="CSGBox3D4" type="CSGBox3D" parent="Environment"]
@@ -200,6 +212,12 @@ use_collision = true
 radius = 1.0
 height = 30.0
 material = SubResource("StandardMaterial3D_1nnrp")
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.4126, -6, 19)
+use_collision = true
+size = Vector3(5, 5, 5)
+material = SubResource("StandardMaterial3D_ukoqd")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.543, 0.645562)
