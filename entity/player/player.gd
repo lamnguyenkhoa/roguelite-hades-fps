@@ -20,14 +20,12 @@ class_name Player
 @onready var aim_ray: AimRay = $Neck/ShakeableCamera/AimRay
 @onready var hitmarker: TextureRect = $Neck/ShakeableCamera/HitMarker
 
-var landing_sfx = preload ("res://asset/sfx/player/jump_landing.wav")
+var landing_sfx = preload("res://asset/sfx/player/jump_landing.wav")
 
 const MAX_SPEED = 8.0
 const MAX_FALL_SPEED = 50.0
 const ACCEL_RATE = 40.0
 const JUMP_FORCE = 8
-const RAY_REACH = 0.1
-const MOUSE_SENS = 0.005
 const GRAVITY = 14
 const FALL_SPEED_TO_SHAKE_CAMERA = 15
 const HEAVY_FALL_SHAKE_TRAUMA = 0.8
@@ -53,7 +51,7 @@ var is_sliding:
 			if value:
 				player_camera.add_long_trauma(SLIDE_SHAKE_TRAUMA)
 			else:
-				player_camera.add_long_trauma( - SLIDE_SHAKE_TRAUMA)
+				player_camera.add_long_trauma(-SLIDE_SHAKE_TRAUMA)
 		is_sliding = value
 var bonus_speed = 0
 var raw_input_dir = Vector2(0, 0)
@@ -103,10 +101,10 @@ func _physics_process(delta):
 	if is_dashing:
 		if raw_input_dir == Vector2.ZERO:
 			raw_input_dir = Vector2(0, -1)
-			input_dir = raw_input_dir.rotated( - rotation.y)
+			input_dir = raw_input_dir.rotated(-rotation.y)
 	if not is_dashing and not is_sliding:
 		raw_input_dir = Input.get_vector("left", "right", "up", "down")
-		input_dir = raw_input_dir.rotated( - rotation.y)
+		input_dir = raw_input_dir.rotated(-rotation.y)
 
 	# If the next line is for grounded only, we will have bunnyhop tech
 	# If not move, gradually reduce movespeed to 0 (speed decay)
@@ -119,7 +117,7 @@ func _physics_process(delta):
 		state_chart.send_event("grounded")
 		current_air_jump_count = 0
 		if vel_vertical < 0:
-			if vel_vertical < - FALL_SPEED_TO_SHAKE_CAMERA:
+			if vel_vertical < -FALL_SPEED_TO_SHAKE_CAMERA:
 				player_camera.add_trauma(HEAVY_FALL_SHAKE_TRAUMA)
 			play_sfx(landing_sfx)
 			jumped = false
@@ -178,7 +176,7 @@ func show_debug_label():
 	debug_label.text += "\nCoyote jump: {0}".format([can_coyote_jump])
 	debug_label.text += "\nUsing gun: {0}".format([gun_container.get_child(current_gun_slot).data.name])
 
-func jump(multiplier=1.0):
+func jump(multiplier = 1.0):
 	vel_vertical = JUMP_FORCE * multiplier
 	jumped = true
 	state_chart.send_event("jump")
@@ -226,7 +224,7 @@ func check_secondary_attack():
 				else:
 					gun.play_idle_anim()
 
-func perform_attack(gun: Gun, is_secondary: bool=false, bounce_count=0, _is_pierce=false):
+func perform_attack(gun: Gun, is_secondary: bool = false, bounce_count = 0, _is_pierce = false):
 	var gun_projectile: PackedScene = gun.primary_projectile
 	var screenshake_amount = gun.data.primary_screenshake
 	var gun_sfx = gun.data.primary_sfx
@@ -240,21 +238,21 @@ func perform_attack(gun: Gun, is_secondary: bool=false, bounce_count=0, _is_pier
 	gun.play_muzzle_flash(is_secondary)
 	var bullet_start_pos = gun.barrel.global_position
 	# Randomize bullet start pos a bit
-	bullet_start_pos.x += randf_range( - screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
-	bullet_start_pos.y += randf_range( - screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
+	bullet_start_pos.x += randf_range(-screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
+	bullet_start_pos.y += randf_range(-screenshake_amount / BULLET_SPAWN_POS_VARIATION, screenshake_amount / BULLET_SPAWN_POS_VARIATION)
 	create_hitscan_attack(bullet_start_pos, (aim_ray.aim_ray_end.global_position - bullet_start_pos), bounce_count, gun_projectile, damage)
 	# Screenshake
 	player_camera.add_trauma(screenshake_amount)
 	# Recoil
 	player_camera.rotate_x(screenshake_amount / RECOIL_COEFFICIENT)
-	player_camera.rotate_y(randf_range( - screenshake_amount / RECOIL_COEFFICIENT, screenshake_amount / RECOIL_COEFFICIENT))
+	player_camera.rotate_y(randf_range(-screenshake_amount / RECOIL_COEFFICIENT, screenshake_amount / RECOIL_COEFFICIENT))
 
 func rotate_player(event):
 	rotate(Vector3(0, -1, 0), event.relative.x * (GameManager.mouse_sensitivity / 10000))
-	player_camera.rotate_x( - event.relative.y * (GameManager.mouse_sensitivity / 10000))
+	player_camera.rotate_x(-event.relative.y * (GameManager.mouse_sensitivity / 10000))
 	player_camera.rotation.y = 0
 	player_camera.rotation.z = 0
-	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad( - 89), deg_to_rad(89))
+	player_camera.rotation.x = clamp(player_camera.global_rotation.x, deg_to_rad(-89), deg_to_rad(89))
 
 func camera_control(delta):
 	# Tilt camera
@@ -262,7 +260,7 @@ func camera_control(delta):
 		if raw_input_dir.x < 0:
 			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(3.0), delta * 5)
 		elif raw_input_dir.x > 0:
-			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad( - 3.0), delta * 5)
+			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(-3.0), delta * 5)
 		else:
 			neck.rotation.z = lerp(neck.rotation.z, deg_to_rad(0), delta * 5)
 
@@ -332,13 +330,12 @@ func moving_toward_wall() -> bool:
 		return true
 	return false
 
-func flash_hitmarker(color: Color=Color.YELLOW):
+func flash_hitmarker(color: Color = Color.YELLOW):
 	hitmarker.modulate = color
 	hitmarker.modulate.a = 1
 
 func create_hitscan_attack(start_pos: Vector3, direction: Vector3, bounce_left: int, gun_projectile: PackedScene, damage: int):
 	var hitscan_ray: AimRay = aim_ray_prefab.instantiate()
-	var hitscan_ray_end = hitscan_ray.aim_ray_end
 	get_parent().add_child(hitscan_ray)
 	hitscan_ray.global_position = start_pos
 	hitscan_ray.look_at(start_pos + direction)
@@ -366,7 +363,7 @@ func create_hitscan_attack(start_pos: Vector3, direction: Vector3, bounce_left: 
 		if bounce_left > 0:
 			create_hitscan_attack(hitscan_col_point, direction.bounce(hitscan_col_normal), bounce_left - 1, gun_projectile, damage)
 	else:
-		bullet_inst.init(start_pos, hitscan_ray_end.global_position)
+		bullet_inst.init(start_pos, hitscan_ray.aim_ray_end.global_position)
 		get_parent().add_child(bullet_inst)
 	hitscan_ray.call_deferred("queue_free")
 
