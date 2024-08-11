@@ -7,4 +7,4 @@ script = ExtResource("1_es47x")
 name = "Dummy"
 max_hp = 100
 base_damage = 10
-base_movespeed = 10.0
+base_movespeed = 5.0

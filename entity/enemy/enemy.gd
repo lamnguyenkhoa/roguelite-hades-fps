@@ -4,27 +4,30 @@ class_name Enemy
 @export var data: EnemyResource
 @export var bloodsplatter: PackedScene
 
+@onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
+
 var current_hp: int
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
-
-const SPEED = 5.0
-const JUMP_VELOCITY = 4.5
+var navigation_initialized = false
 
 func _ready():
 	current_hp = data.max_hp
+	call_deferred("actor_setup")
 
-func _physics_process(delta):
-	if not is_on_floor():
-		velocity.y -= gravity * delta
-	var move_dir = Vector2(0, 0)
-	var direction = (transform.basis * Vector3(move_dir.x, 0, move_dir.y)).normalized()
-	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
-	move_and_slide()
+func actor_setup():
+	await get_tree().physics_frame
+	navigation_initialized = true
+
+func _physics_process(_delta):
+	if GameManager.player:
+		nav_agent.target_position = GameManager.player.global_position
+
+	if navigation_initialized:
+		var current_position = global_position
+		var next_position = nav_agent.get_next_path_position()
+		var move_dir = (next_position - current_position).normalized()
+		var new_velocity = move_dir * data.base_movespeed
+		nav_agent.velocity = new_velocity
 
 ## Return true if this kill enemy
 func damaged(value: int) -> bool:
@@ -48,3 +51,11 @@ func play_on_damaged_effect(pos: Vector3, normal: Vector3):
 
 func dead():
 	call_deferred("queue_free")
+
+func _on_navigation_agent_3d_target_reached() -> void:
+	print("Reached! Attacked player")
+
+
+func _on_navigation_agent_3d_velocity_computed(safe_velocity: Vector3) -> void:
+	velocity = velocity.move_toward(safe_velocity, 0.25)
+	move_and_slide()

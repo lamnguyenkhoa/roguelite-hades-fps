@@ -327,7 +327,7 @@ secondary_projetile = ExtResource("4_67s47")
 transform = Transform3D(-1, 0, 2.53518e-06, 0, 1, 0, -2.53518e-06, 0, -1, 0, 0, 0)
 
 [node name="ModelParent2" type="Node3D" parent="ModelParent"]
-transform = Transform3D(1, 0, 0, 0, 1, -4.46638e-06, 0, 4.46638e-06, 1, 0, 0.000515426, 0)
+transform = Transform3D(1, 0, 0, 0, 1, -4.46638e-06, 0, 4.46638e-06, 1, 0, 0.00599689, 0)
 
 [node name="Retribution" type="MeshInstance3D" parent="ModelParent/ModelParent2"]
 transform = Transform3D(-60, -5.24537e-06, -2.29282e-13, 0, -2.62268e-06, 60, -5.24537e-06, 60, 2.62268e-06, 2.57864e-07, -0.122027, 0.101715)

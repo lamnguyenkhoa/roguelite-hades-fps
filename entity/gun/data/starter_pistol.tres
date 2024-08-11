@@ -11,7 +11,7 @@ description = "Punchy pistol with ricochet secondary attack.
 
 LMB: Fire a hitscan shot.
 RMB: Charge up to fire a 3-times ricochet hitscan shot."
-firerate = 2.4
+firerate = 2.2
 projectile_speed = 0.0
 is_hitscan = true
 primary_damage = 5

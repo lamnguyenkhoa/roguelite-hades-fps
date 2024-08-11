@@ -1,8 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://d0wmejqbc8i1o"]
+[gd_scene load_steps=7 format=3 uid="uid://0i5hp04s87cg"]
 
-[ext_resource type="Script" path="res://entity/enemy/enemy.gd" id="1_4qpav"]
-[ext_resource type="Resource" uid="uid://bssnvfuelykkw" path="res://entity/enemy/dummy/dummy.tres" id="2_1r4r8"]
-[ext_resource type="PackedScene" uid="uid://du8i8c6s2bmy7" path="res://entity/enemy/BloodSplatter.tscn" id="2_htbmu"]
+[ext_resource type="Script" path="res://entity/enemy/enemy.gd" id="1_vn03g"]
+[ext_resource type="Resource" uid="uid://bssnvfuelykkw" path="res://entity/enemy/dummy/dummy.tres" id="2_oxaqu"]
+[ext_resource type="PackedScene" uid="uid://du8i8c6s2bmy7" path="res://entity/enemy/BloodSplatter.tscn" id="3_bcef4"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gjttf"]
 
@@ -14,9 +14,9 @@ material = SubResource("StandardMaterial3D_5c44c")
 
 [node name="DummyEnemy" type="CharacterBody3D"]
 collision_layer = 2
-script = ExtResource("1_4qpav")
-data = ExtResource("2_1r4r8")
-bloodsplatter = ExtResource("2_htbmu")
+script = ExtResource("1_vn03g")
+data = ExtResource("2_oxaqu")
+bloodsplatter = ExtResource("3_bcef4")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
