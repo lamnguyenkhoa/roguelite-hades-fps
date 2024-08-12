@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EnemyResource" load_steps=2 format=3 uid="uid://dj0n647p5wusl"]
+
+[ext_resource type="Script" path="res://entity/enemy/enemy_resource.gd" id="1_eq1ef"]
+
+[resource]
+script = ExtResource("1_eq1ef")
+name = "Flower Man"
+max_hp = 20
+base_damage = 10
+base_movespeed = 7.0

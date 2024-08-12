@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://7s75qf3um0h0" path="res://entity/player/Player.tscn" id="1_qaqoy"]
 [ext_resource type="AudioStream" uid="uid://7c5wkufm1y7w" path="res://asset/bgm/ambience_d21_loop.ogg" id="2_d8msp"]
-[ext_resource type="PackedScene" uid="uid://d0wmejqbc8i1o" path="res://entity/enemy/dummy/DummyEnemy.tscn" id="3_hbr2k"]
+[ext_resource type="PackedScene" uid="uid://0i5hp04s87cg" path="res://entity/enemy/flower_man/FlowerMan.tscn" id="3_8tf64"]
 [ext_resource type="Texture2D" uid="uid://vemiw30b6agk" path="res://asset/texture/sbs-tiny-texture-pack/Tile/Tile_02-128x128.png" id="4_brpfb"]
 [ext_resource type="Texture2D" uid="uid://bloscd0h7gksy" path="res://asset/texture/sbs-tiny-texture-pack/Tile/Tile_23-128x128.png" id="4_rras7"]
 [ext_resource type="Texture2D" uid="uid://c44kgmlldkhra" path="res://asset/texture/sbs-tiny-texture-pack/Tile/Tile_21-128x128.png" id="6_ffshh"]
@@ -61,11 +61,20 @@ omni_range = 25.0
 
 [node name="Enemies" type="Node3D" parent="."]
 
-[node name="DummyEnemy" parent="Enemies" instance=ExtResource("3_hbr2k")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, -3.2545, 0)
+[node name="FlowerMan" parent="Enemies" instance=ExtResource("3_8tf64")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, -4, 0)
 
-[node name="DummyEnemy2" parent="Enemies" instance=ExtResource("3_hbr2k")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.0993, -3.2545, -8)
+[node name="FlowerMan2" parent="Enemies" instance=ExtResource("3_8tf64")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, -4, 4)
+
+[node name="FlowerMan3" parent="Enemies" instance=ExtResource("3_8tf64")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38, -5, 8)
+
+[node name="FlowerMan4" parent="Enemies" instance=ExtResource("3_8tf64")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38, -5, -14)
+
+[node name="FlowerMan5" parent="Enemies" instance=ExtResource("3_8tf64")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38, -5, 17)
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_2p57d")

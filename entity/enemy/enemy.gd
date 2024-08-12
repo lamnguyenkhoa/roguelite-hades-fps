@@ -4,15 +4,16 @@ class_name Enemy
 @export var data: EnemyResource
 @export var bloodsplatter: PackedScene
 
+@onready var anim_player: AnimationPlayer = $FlowerManAnim/AnimationPlayer
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
 
 var current_hp: int
-var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var navigation_initialized = false
 
 func _ready():
 	current_hp = data.max_hp
 	call_deferred("actor_setup")
+	anim_player.play("run")
 
 func actor_setup():
 	await get_tree().physics_frame
@@ -21,6 +22,7 @@ func actor_setup():
 func _physics_process(_delta):
 	if GameManager.player:
 		nav_agent.target_position = GameManager.player.global_position
+		look_at(GameManager.player.global_position, Vector3.UP, true)
 
 	if navigation_initialized:
 		var current_position = global_position
