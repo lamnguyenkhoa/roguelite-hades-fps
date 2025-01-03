@@ -6,7 +6,7 @@
 [ext_resource type="Environment" uid="uid://bnsi5blt3qbue" path="res://level/world_environment.tres" id="4_tl54g"]
 [ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="5_cqfjv"]
 [ext_resource type="AudioStream" uid="uid://7c5wkufm1y7w" path="res://asset/bgm/ambience_d21_loop.ogg" id="6_iohbr"]
-[ext_resource type="PackedScene" uid="uid://d0wmejqbc8i1o" path="res://entity/enemy/dummy/DummyEnemy.tscn" id="7_8w4jv"]
+[ext_resource type="PackedScene" uid="uid://0i5hp04s87cg" path="res://entity/enemy/flower_man/FlowerMan.tscn" id="7_vl4fa"]
 
 [node name="TestLevel" type="Node3D"]
 
@@ -132,8 +132,5 @@ stream = ExtResource("6_iohbr")
 autoplay = true
 bus = &"BGM"
 
-[node name="DummyEnemy" parent="." instance=ExtResource("7_8w4jv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7455, 0)
-
-[node name="DummyEnemy2" parent="." instance=ExtResource("7_8w4jv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0993, 1.7455, 0)
+[node name="FlowerMan" parent="." instance=ExtResource("7_vl4fa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.57692, 0)

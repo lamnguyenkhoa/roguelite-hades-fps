@@ -23,7 +23,7 @@
 script = ExtResource("1_rl0vi")
 can_wall_jump = true
 can_wall_cling = true
-max_air_jump = 0
+max_air_jump = 1
 aim_ray_prefab = ExtResource("5_dqbuo")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
